@@ -2,14 +2,14 @@
   "name": "Medicine Curriculum Planner",
   "short_name": "MedPlanner",
   "description": "Progressive Web App for medical students to plan their UTESA 2013 Medicine curriculum",
-  "start_url": "/",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#1f2937",
   "theme_color": "#3b82f6",
   "orientation": "portrait-primary",
   "icons": [
-    { "src": "./icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png" }
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
   ],
   "categories": ["education", "productivity"],
   "screenshots": [
