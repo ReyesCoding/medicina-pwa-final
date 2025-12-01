@@ -3,31 +3,29 @@ import App from "./App";
 import "./index.css";
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import AdminPage from '@/admin/AdminPage'; // Mantenemos tu componente original
+import AdminPage from '@/admin/AdminPage'; 
 
-// --- LÓGICA DE ACTUALIZACIÓN DEL SERVICE WORKER (FIX PANTALLA BLANCA) ---
-const updateSW = async () => {
+// --- LÓGICA DE SERVICE WORKER ESTABLE ---
+const registerSW = async () => {
   if ('serviceWorker' in navigator) {
     try {
-      // 1. Timestamp para evitar caché del navegador sobre el propio sw.js
-      const swUrl = `${import.meta.env.BASE_URL}sw.js?t=${Date.now()}`;
+      // QUITAMOS EL TIMESTAMP DINÁMICO para evitar el bucle infinito
+      const swUrl = `${import.meta.env.BASE_URL}sw.js`;
       
       const registration = await navigator.serviceWorker.register(swUrl);
 
-      // 2. Si hay un SW esperando, forzar activación
+      // Si hay una actualización esperando, la activamos pero NO recargamos a lo loco
       if (registration.waiting) {
         registration.waiting.postMessage({ type: 'SKIP_WAITING' });
       }
 
-      // 3. Escuchar cambios de estado
       registration.onupdatefound = () => {
         const installingWorker = registration.installing;
         if (installingWorker) {
           installingWorker.onstatechange = () => {
             if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
-              // Nueva versión instalada -> Forzar recarga
-              console.log('Nueva versión detectada. Recargando...');
-              window.location.reload();
+              // Solo logueamos, no forzamos reload automático para no causar loops
+              console.log('Nueva versión disponible. Se aplicará en la próxima visita.');
             }
           };
         }
@@ -38,8 +36,7 @@ const updateSW = async () => {
   }
 };
 
-// Ejecutamos la lógica de actualización
-updateSW();
+registerSW();
 
 const isAdmin =
   new URLSearchParams(window.location.search).get('admin') === '1' ||

@@ -1,5 +1,5 @@
-// VERSIÓN AGRESIVA PARA SOLUCIONAR PANTALLA BLANCA
-const CACHE_VERSION = 'v-FIX-IOS-RELOAD-01';
+// VERSIÓN ESTABLE - SIN BUCLE
+const CACHE_VERSION = 'v-STABLE-2025-11-28-FIX';
 const CACHE_NAME = `medicina-pwa-${CACHE_VERSION}`;
 
 const ASSETS = [
@@ -12,7 +12,7 @@ const ASSETS = [
 ];
 
 self.addEventListener('install', (event) => {
-  self.skipWaiting(); // Forzar instalación inmediata
+  self.skipWaiting(); 
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
   );
@@ -23,18 +23,16 @@ self.addEventListener('activate', (event) => {
     caches.keys().then((keys) => {
       return Promise.all(
         keys.map((key) => {
-          // Si no es la versión exacta actual, BORRAR SIN PIEDAD
           if (key !== CACHE_NAME) {
-            console.log('[SW] Limpiando caché antiguo:', key);
             return caches.delete(key);
           }
         })
       );
-    }).then(() => self.clients.claim()) // Tomar control inmediatamente
+    }).then(() => self.clients.claim())
   );
 });
 
-// Escuchar mensaje del cliente para forzar actualización
+// Manejo de mensajes
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
@@ -47,7 +45,7 @@ self.addEventListener('fetch', (event) => {
 
   if (req.method !== 'GET' || url.origin !== self.location.origin) return;
 
-  // DATA (JSONs) -> Network First
+  // JSON Data -> Network First
   if (url.pathname.includes('/data/')) {
     event.respondWith(
       fetch(req)
@@ -61,7 +59,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // ASSETS (JS, CSS, HTML) -> Cache First con Fallback
+  // Assets -> Cache First
   event.respondWith(
     caches.match(req).then((cached) => {
       return cached || fetch(req).then((res) => {
