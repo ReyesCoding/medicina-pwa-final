@@ -1,6 +1,6 @@
 // client/public/sw.js
 // 🧠 Cambia el número si necesitas forzar otra actualización
-const CACHE_VERSION = 'v2025-11-28-features-pack';
+const CACHE_VERSION = 'v2025-11-28-final-release';
 const CACHE_NAME = `medicina-pwa-${CACHE_VERSION}`;
 
 // Qué precachear siempre (shell de la app)
