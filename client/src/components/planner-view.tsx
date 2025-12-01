@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { Trash2, Plus, Sparkles, CalendarClock, AlertCircle } from 'lucide-react';
+import { Trash2, Sparkles, CalendarClock, AlertCircle } from 'lucide-react';
 
 export function PlannerView() {
   const { passedCourses, getCourseStatus } = useStudentProgress();
@@ -19,18 +19,39 @@ export function PlannerView() {
 
   // Cargar datos
   useEffect(() => {
+    // CORRECCIÓN CRÍTICA 1: Usar BASE_URL para que funcione en GitHub Pages
+    const baseUrl = import.meta.env.BASE_URL; 
+    
     Promise.all([
-      fetch('data/courses.json').then(r => r.json()),
-      fetch('data/sections.json').then(r => r.json())
+      fetch(`${baseUrl}data/courses.json`).then(r => r.json()),
+      fetch(`${baseUrl}data/sections.json`).then(r => r.json())
     ]).then(([coursesData, sectionsData]) => {
-      setAllCourses(coursesData);
-      setAllSections(sectionsData);
+      
+      // CORRECCIÓN CRÍTICA 2: Normalización de datos (Defensa contra Objetos vs Arrays)
+      // Si recibimos un Objeto { courses: [...] }, extraemos el array. Si es Array, lo usamos directo.
+      const validCourses = Array.isArray(coursesData) 
+        ? coursesData 
+        : (coursesData.courses || []);
+
+      // Lo mismo para secciones. A veces vienen como { sections: [...] } o { courses: [...] } dependiendo de la fuente
+      const validSections = Array.isArray(sectionsData) 
+        ? sectionsData 
+        : (sectionsData.sections || sectionsData.courses || []);
+
+      console.log('Planner loaded courses:', validCourses.length);
+      console.log('Planner loaded sections:', validSections.length);
+
+      setAllCourses(validCourses);
+      setAllSections(validSections);
       
       // Cargar plan guardado
       const saved = localStorage.getItem('medicina-planner-save');
       if (saved) {
         try { setPlan(JSON.parse(saved)); } catch (e) { console.error(e); }
       }
+      setLoading(false);
+    }).catch(err => {
+      console.error("Error crítico cargando datos del planificador:", err);
       setLoading(false);
     });
   }, []);
@@ -44,10 +65,13 @@ export function PlannerView() {
 
   // --- FILTROS Y CÁLCULOS ---
 
-  // 1. Materias Disponibles (No aprobadas, Prerrequisitos cumplidos, No en el plan actual)
+  // 1. Materias Disponibles
   const availableCourses = useMemo(() => {
+    // Protección extra: Asegurar que allCourses sea array antes de filtrar
+    if (!Array.isArray(allCourses)) return [];
+
     return allCourses.filter(course => {
-      if (plan.some(p => p.courseId === course.id)) return false; // Ya en el plan
+      if (plan.some(p => p.courseId === course.id)) return false; 
       const status = getCourseStatus(course, passedCourses);
       return status === 'available';
     }).sort((a, b) => a.term - b.term);
@@ -65,7 +89,6 @@ export function PlannerView() {
     const section = allSections.find(s => s.crn === sectionCrn);
     if (!section) return;
 
-    // Verificar choques
     const conflict = plan.find(p => hasConflict(p.section, section));
     if (conflict) {
       const conflictCourse = allCourses.find(c => c.id === conflict.courseId);
@@ -83,7 +106,6 @@ export function PlannerView() {
   const handleAutoSuggest = () => {
     if (!confirm('¿Quieres que la IA genere un horario automático basado en tu progreso?\nEsto completará tu selección actual.')) return;
     
-    // Aquí ocurre la magia
     const suggestion = generateSuggestedPlan(availableCourses, allSections, plan);
     
     if (suggestion.length === plan.length) {
@@ -98,7 +120,7 @@ export function PlannerView() {
   return (
     <div className="flex flex-col h-full bg-background animate-in fade-in">
       
-      {/* HEADER DEL PLANIFICADOR */}
+      {/* HEADER */}
       <div className="p-4 border-b bg-card flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h2 className="text-xl font-bold flex items-center gap-2">
@@ -138,7 +160,7 @@ export function PlannerView() {
 
           <div className="flex-1 overflow-auto p-4 md:p-6 grid md:grid-cols-12 gap-6">
             
-            {/* COLUMNA 1: MATERIAS SELECCIONADAS (Visible siempre en Desktop, Tab en Movil) */}
+            {/* COLUMNA 1: SELECCIONADAS */}
             <div className={`md:col-span-7 lg:col-span-8 ${'md:block'}`}>
               <TabsContent value="selected" className="mt-0 h-full space-y-4">
                 <h3 className="font-semibold text-lg hidden md:block mb-4">Materias Seleccionadas</h3>
@@ -177,7 +199,7 @@ export function PlannerView() {
               </TabsContent>
             </div>
 
-            {/* COLUMNA 2: MATERIAS DISPONIBLES (Visible siempre en Desktop, Tab en Movil) */}
+            {/* COLUMNA 2: DISPONIBLES */}
             <div className={`md:col-span-5 lg:col-span-4 ${'md:block'}`}>
               <TabsContent value="available" className="mt-0 h-full space-y-4">
                 <h3 className="font-semibold text-lg hidden md:block mb-4">Agregar Materias</h3>
@@ -187,8 +209,11 @@ export function PlannerView() {
                     <div className="p-4 text-center text-sm text-muted-foreground">No hay más materias disponibles por ahora.</div>
                   ) : (
                     availableCourses.map(course => {
-                      // Secciones de este curso
-                      const sections = allSections.filter(s => s.courseId === course.id);
+                      // CORRECCIÓN CRÍTICA 3: Protección al filtrar secciones
+                      // Si allSections no es array (por algún error raro), esto evita el crash
+                      const sections = Array.isArray(allSections) 
+                        ? allSections.filter(s => s.courseId === course.id)
+                        : [];
                       
                       return (
                         <Card key={course.id} className="bg-muted/30">
