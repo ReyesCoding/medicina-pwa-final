@@ -1,9 +1,7 @@
-// client/public/sw.js
-// 🧠 Cambia el número si necesitas forzar otra actualización
-const CACHE_VERSION = 'v2025-11-28-final-release';
+// VERSIÓN AGRESIVA PARA SOLUCIONAR PANTALLA BLANCA
+const CACHE_VERSION = 'v-FIX-IOS-RELOAD-01';
 const CACHE_NAME = `medicina-pwa-${CACHE_VERSION}`;
 
-// Qué precachear siempre (shell de la app)
 const ASSETS = [
   './',
   './index.html',
@@ -13,78 +11,66 @@ const ASSETS = [
   './favicon.ico',
 ];
 
-// Datasets (los traemos network-first para poder actualizarlos)
-const DATA = [
-  './data/courses.json',
-  './data/sections.json',
-];
-
 self.addEventListener('install', (event) => {
-  // Instala y toma control sin esperar
-  self.skipWaiting();
-  event.waitUntil((async () => {
-    try {
-      const cache = await caches.open(CACHE_NAME);
-      await cache.addAll(ASSETS);
-      // Nota: no precacheamos DATA aquí para que el primer fetch ya se intente a red
-    } catch (_) {
-      // evitar romper la instalación si algo falla en addAll
-    }
-  })());
+  self.skipWaiting(); // Forzar instalación inmediata
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
+  );
 });
 
 self.addEventListener('activate', (event) => {
-  event.waitUntil((async () => {
-    // Borra todos los caches antiguos que no coinciden con la versión actual
-    const keys = await caches.keys();
-    await Promise.all(
-      keys.map((k) => (k.startsWith('medicina-pwa-') && k !== CACHE_NAME) ? caches.delete(k) : undefined)
-    );
-    await self.clients.claim();
-  })());
+  event.waitUntil(
+    caches.keys().then((keys) => {
+      return Promise.all(
+        keys.map((key) => {
+          // Si no es la versión exacta actual, BORRAR SIN PIEDAD
+          if (key !== CACHE_NAME) {
+            console.log('[SW] Limpiando caché antiguo:', key);
+            return caches.delete(key);
+          }
+        })
+      );
+    }).then(() => self.clients.claim()) // Tomar control inmediatamente
+  );
+});
+
+// Escuchar mensaje del cliente para forzar actualización
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
 });
 
 self.addEventListener('fetch', (event) => {
   const req = event.request;
   const url = new URL(req.url);
 
-  // Solo manejar GET del mismo origen
   if (req.method !== 'GET' || url.origin !== self.location.origin) return;
 
-  const isData = url.pathname.includes('/data/');
-
-  // DATA -> network-first (cae a cache si offline)
-  if (isData) {
-    event.respondWith((async () => {
-      try {
-        const res = await fetch(req);
-        if (res && res.ok) {
-          const cache = await caches.open(CACHE_NAME);
-          cache.put(req, res.clone());
-        }
-        return res;
-      } catch {
-        const cached = await caches.match(req);
-        return cached || new Response('{"error":"offline"}', { status: 503, headers: { 'Content-Type': 'application/json' } });
-      }
-    })());
+  // DATA (JSONs) -> Network First
+  if (url.pathname.includes('/data/')) {
+    event.respondWith(
+      fetch(req)
+        .then((res) => {
+          const clone = res.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(req, clone));
+          return res;
+        })
+        .catch(() => caches.match(req))
+    );
     return;
   }
 
-  // Resto -> cache-first (cae a red y cachea)
-  event.respondWith((async () => {
-    const cached = await caches.match(req);
-    if (cached) return cached;
-    try {
-      const res = await fetch(req);
-      if (res && res.ok) {
-        const cache = await caches.open(CACHE_NAME);
-        cache.put(req, res.clone());
-      }
-      return res;
-    } catch {
-      // Fallback ultra simple si no hay cache
-      return new Response('Offline', { status: 503 });
-    }
-  })());
+  // ASSETS (JS, CSS, HTML) -> Cache First con Fallback
+  event.respondWith(
+    caches.match(req).then((cached) => {
+      return cached || fetch(req).then((res) => {
+        if (res && res.status === 200) {
+           const clone = res.clone();
+           caches.open(CACHE_NAME).then((c) => c.put(req, clone));
+        }
+        return res;
+      });
+    })
+  );
 });
