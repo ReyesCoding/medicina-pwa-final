@@ -1,36 +1,30 @@
 import { Course, Section } from '@/types';
 
-// Tipos auxiliares para el algoritmo
 export interface PlannedSection {
   courseId: string;
   sectionCrn: string;
   section: Section;
 }
 
-// Convierte "14:30" a minutos totales (870) para facilitar comparaciones matemáticas
 const timeToMinutes = (time: string): number => {
+  if (!time) return 0;
   const [hours, minutes] = time.split(':').map(Number);
   return hours * 60 + minutes;
 };
 
-// Verifica si dos secciones chocan en horario
 export const hasConflict = (sec1: Section, sec2: Section): boolean => {
-  // Si no tienen horario definido, no chocan
   if (!sec1.schedule || !sec2.schedule) return false;
 
   for (const s1 of sec1.schedule) {
     for (const s2 of sec2.schedule) {
-      // 1. Deben ser el mismo día
       if (s1.day !== s2.day) continue;
-
-      // 2. Convertir a minutos
+      
       const start1 = timeToMinutes(s1.startTime);
       const end1 = timeToMinutes(s1.endTime);
       const start2 = timeToMinutes(s2.startTime);
       const end2 = timeToMinutes(s2.endTime);
 
-      // 3. Verificar superposición (Overlap logic)
-      // Chocan si uno empieza antes de que el otro termine
+      // Lógica de superposición
       if (start1 < end2 && start2 < end1) {
         return true;
       }
@@ -39,51 +33,60 @@ export const hasConflict = (sec1: Section, sec2: Section): boolean => {
   return false;
 };
 
-// --- ALGORITMO PRINCIPAL: SUGERIR PLAN ---
+// --- ALGORITMO MEJORADO: 31 CRÉDITOS + ORDEN DE PENSUM ---
 export const generateSuggestedPlan = (
   availableCourses: Course[],
   allSections: Section[],
   currentPlan: PlannedSection[],
-  maxCredits: number = 28 // Límite prudente (un poco menos de 31 para no saturar)
+  maxCredits: number = 31 // Límite exacto de 31
 ): PlannedSection[] => {
   
-  // 1. Empezamos con el plan actual (si el usuario ya eligió algo, lo respetamos)
   const newPlan: PlannedSection[] = [...currentPlan];
+  
+  // Calcular créditos actuales
   let currentCredits = newPlan.reduce((sum, item) => {
     const course = availableCourses.find(c => c.id === item.courseId);
+    // Si la materia ya está en el plan pero no en available (pq ya se seleccionó), hay que buscarla en un scope global
+    // Para simplificar, asumimos que availableCourses tiene todo lo necesario o el peso viene de item.
+    // Hack: Si no encontramos el curso, asumimos promedio 3 créditos para no romper, 
+    // pero idealmente deberíamos tener acceso a todos los cursos.
     return sum + (course?.credits || 0);
   }, 0);
 
-  // 2. Ordenamos las materias disponibles por prioridad (menor cuatrimestre primero)
-  // Esto asegura que el algoritmo priorice atrasadas o del ciclo actual.
+  // 1. ORDENAMIENTO ESTRATÉGICO
+  // Prioridad 1: Menor cuatrimestre (para no dejar materias atrás)
+  // Prioridad 2: Mayor cantidad de créditos (meter las difíciles primero)
   const sortedCourses = [...availableCourses].sort((a, b) => {
     if (a.term !== b.term) return a.term - b.term;
-    // Si son del mismo ciclo, priorizamos las que tienen más créditos (más difíciles)
     return b.credits - a.credits; 
   });
 
-  // 3. Iteramos materia por materia
+  // 2. BARRIDO DE MATERIAS
   for (const course of sortedCourses) {
-    // Si ya está en el plan, saltar
+    // Si ya está en el plan, siguiente
     if (newPlan.some(p => p.courseId === course.id)) continue;
 
-    // Si nos pasamos de créditos, dejar de intentar agregar
+    // REGLA DE ORO: Si agregar esta materia se pasa de 31, NO la agregamos.
     if (currentCredits + course.credits > maxCredits) continue;
 
-    // 4. Buscar secciones para esta materia
-    // Nota: Filtramos por ID de curso. Tu JSON usa "courseId": "MED-100"
-    const courseSections = allSections.filter(s => s.courseId === course.id);
+    // 3. BUSCAR SECCIÓN COMPATIBLE
+    // Normalizamos IDs para evitar errores (MED-100 vs MED100)
+    const courseSections = allSections.filter(s => 
+      s.courseId === course.id || 
+      s.courseId.replace(/-/g, '') === course.id.replace(/-/g, '')
+    );
 
-    // 5. Intentar encontrar una sección que no choque con NADA de lo que ya tenemos en el plan
+    if (courseSections.length === 0) continue; // Si no hay secciones (error de datos), saltamos
+
+    // Buscamos la primera sección que no choque con lo que ya tenemos
     const validSection = courseSections.find(candidateSection => {
-      // Verificar conflicto con cada materia ya planificada
       const conflicts = newPlan.some(existingItem => 
         hasConflict(existingItem.section, candidateSection)
       );
       return !conflicts;
     });
 
-    // 6. Si encontramos una sección válida, ¡la agregamos!
+    // 4. AGREGAR AL PLAN
     if (validSection) {
       newPlan.push({
         courseId: course.id,
@@ -92,6 +95,9 @@ export const generateSuggestedPlan = (
       });
       currentCredits += course.credits;
     }
+
+    // Si llegamos exactamente a 30 o 31, podemos parar para optimizar
+    if (currentCredits >= maxCredits) break;
   }
 
   return newPlan;

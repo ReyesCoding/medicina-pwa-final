@@ -19,7 +19,6 @@ export function PlannerView() {
 
   // Cargar datos
   useEffect(() => {
-    // CORRECCIÓN CRÍTICA 1: Usar BASE_URL para que funcione en GitHub Pages
     const baseUrl = import.meta.env.BASE_URL; 
     
     Promise.all([
@@ -27,75 +26,70 @@ export function PlannerView() {
       fetch(`${baseUrl}data/sections.json`).then(r => r.json())
     ]).then(([coursesData, sectionsData]) => {
       
-      // CORRECCIÓN CRÍTICA 2: Normalización de datos (Defensa contra Objetos vs Arrays)
-      // Si recibimos un Objeto { courses: [...] }, extraemos el array. Si es Array, lo usamos directo.
-      const validCourses = Array.isArray(coursesData) 
-        ? coursesData 
-        : (coursesData.courses || []);
-
-      // Lo mismo para secciones. A veces vienen como { sections: [...] } o { courses: [...] } dependiendo de la fuente
-      const validSections = Array.isArray(sectionsData) 
-        ? sectionsData 
-        : (sectionsData.sections || sectionsData.courses || []);
-
-      console.log('Planner loaded courses:', validCourses.length);
-      console.log('Planner loaded sections:', validSections.length);
+      const validCourses = Array.isArray(coursesData) ? coursesData : (coursesData.courses || []);
+      const validSections = Array.isArray(sectionsData) ? sectionsData : (sectionsData.sections || sectionsData.courses || []);
 
       setAllCourses(validCourses);
       setAllSections(validSections);
       
-      // Cargar plan guardado
       const saved = localStorage.getItem('medicina-planner-save');
       if (saved) {
         try { setPlan(JSON.parse(saved)); } catch (e) { console.error(e); }
       }
       setLoading(false);
     }).catch(err => {
-      console.error("Error crítico cargando datos del planificador:", err);
+      console.error("Error cargando datos:", err);
       setLoading(false);
     });
   }, []);
 
-  // Guardar plan al cambiar
+  // Guardar plan
   useEffect(() => {
     if (!loading) {
       localStorage.setItem('medicina-planner-save', JSON.stringify(plan));
     }
   }, [plan, loading]);
 
-  // --- FILTROS Y CÁLCULOS ---
-
-  // 1. Materias Disponibles
+  // --- MATERIAS DISPONIBLES (ORDENADAS POR PENSUM) ---
   const availableCourses = useMemo(() => {
-    // Protección extra: Asegurar que allCourses sea array antes de filtrar
     if (!Array.isArray(allCourses)) return [];
-
     return allCourses.filter(course => {
       if (plan.some(p => p.courseId === course.id)) return false; 
       const status = getCourseStatus(course, passedCourses);
       return status === 'available';
-    }).sort((a, b) => a.term - b.term);
+    }).sort((a, b) => a.term - b.term); // Orden estricto por cuatrimestre
   }, [allCourses, passedCourses, plan, getCourseStatus]);
 
-  // 2. Créditos
+  // --- TOTAL CRÉDITOS ---
   const totalCredits = plan.reduce((sum, item) => {
     const c = allCourses.find(c => c.id === item.courseId);
     return sum + (c?.credits || 0);
   }, 0);
 
-  // --- ACCIONES ---
+  // --- HELPER PARA ENCONTRAR SECCIONES (ARREGLA EL BUG "SIN SECCIONES") ---
+  const getSectionsForCourse = (courseId: string) => {
+    if (!Array.isArray(allSections)) return [];
+    // Compara ignorando guiones (MED-100 == MED100)
+    return allSections.filter(s => 
+      s.courseId === courseId || 
+      s.courseId.replace(/-/g, '') === courseId.replace(/-/g, '')
+    );
+  };
 
+  // --- ACCIONES ---
   const handleAddSection = (courseId: string, sectionCrn: string) => {
     const section = allSections.find(s => s.crn === sectionCrn);
     if (!section) return;
 
+    // Verificar choques
     const conflict = plan.find(p => hasConflict(p.section, section));
     if (conflict) {
       const conflictCourse = allCourses.find(c => c.id === conflict.courseId);
-      alert(`⚠️ Choque de horario con ${conflictCourse?.name || conflict.courseId}`);
+      alert(`⚠️ Choque de horario con ${conflictCourse?.name || conflict.courseId}\n\nIntenta elegir otra sección.`);
       return;
     }
 
+    // Agregar al plan
     setPlan([...plan, { courseId, sectionCrn, section }]);
   };
 
@@ -104,18 +98,19 @@ export function PlannerView() {
   };
 
   const handleAutoSuggest = () => {
-    if (!confirm('¿Quieres que la IA genere un horario automático basado en tu progreso?\nEsto completará tu selección actual.')) return;
+    if (!confirm('¿Generar horario automático de hasta 31 créditos?\nSe priorizarán las materias por orden de pensum.')) return;
     
+    // Pasamos disponible + todas las secciones al algoritmo
     const suggestion = generateSuggestedPlan(availableCourses, allSections, plan);
     
     if (suggestion.length === plan.length) {
-      alert('No se encontraron más materias compatibles con el horario actual.');
+      alert('No se encontraron más materias compatibles o secciones disponibles para agregar.');
     } else {
       setPlan(suggestion);
     }
   };
 
-  if (loading) return <div className="p-8 text-center">Cargando planificador...</div>;
+  if (loading) return <div className="p-8 text-center animate-pulse">Cargando materias...</div>;
 
   return (
     <div className="flex flex-col h-full bg-background animate-in fade-in">
@@ -128,17 +123,18 @@ export function PlannerView() {
             Mi Plan de Estudios
           </h2>
           <div className="text-sm text-muted-foreground mt-1">
-            Créditos: <span className={totalCredits > 28 ? "text-orange-500 font-bold" : "font-bold"}>{totalCredits}</span> / 31
+            Créditos Seleccionados: <span className={totalCredits > 31 ? "text-destructive font-bold" : "text-primary font-bold"}>{totalCredits}</span> / 31
           </div>
         </div>
         
         <div className="flex gap-2 w-full md:w-auto">
           <Button 
             onClick={handleAutoSuggest} 
-            className="w-full md:w-auto bg-violet-600 hover:bg-violet-700 text-white"
+            className="w-full md:w-auto bg-violet-600 hover:bg-violet-700 text-white shadow-md"
+            disabled={totalCredits >= 31}
           >
             <Sparkles className="h-4 w-4 mr-2" />
-            Sugerir Plan
+            Sugerir Plan (Auto)
           </Button>
           {plan.length > 0 && (
              <Button variant="outline" onClick={() => setPlan([])} className="text-destructive border-destructive/50">
@@ -151,6 +147,7 @@ export function PlannerView() {
       {/* CONTENIDO PRINCIPAL */}
       <div className="flex-1 overflow-hidden">
         <Tabs defaultValue="selected" className="h-full flex flex-col">
+          {/* TAB LIST MÓVIL */}
           <div className="px-4 pt-2 md:hidden">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="selected">Seleccionadas ({plan.length})</TabsTrigger>
@@ -160,15 +157,15 @@ export function PlannerView() {
 
           <div className="flex-1 overflow-auto p-4 md:p-6 grid md:grid-cols-12 gap-6">
             
-            {/* COLUMNA 1: SELECCIONADAS */}
+            {/* 1. SELECCIONADAS */}
             <div className={`md:col-span-7 lg:col-span-8 ${'md:block'}`}>
               <TabsContent value="selected" className="mt-0 h-full space-y-4">
                 <h3 className="font-semibold text-lg hidden md:block mb-4">Materias Seleccionadas</h3>
                 
                 {plan.length === 0 ? (
-                  <div className="text-center py-12 border-2 border-dashed rounded-xl">
-                    <p className="text-muted-foreground">Tu plan está vacío.</p>
-                    <p className="text-sm text-muted-foreground mt-1">Agrega materias manualmente o usa "Sugerir Plan"</p>
+                  <div className="text-center py-12 border-2 border-dashed rounded-xl bg-muted/10">
+                    <p className="text-muted-foreground font-medium">Tu horario está vacío.</p>
+                    <p className="text-sm text-muted-foreground mt-1">Ve a "Disponibles" para elegir o usa "Sugerir Plan".</p>
                   </div>
                 ) : (
                   <div className="space-y-3">
@@ -176,18 +173,19 @@ export function PlannerView() {
                       const course = allCourses.find(c => c.id === item.courseId);
                       if (!course) return null;
                       return (
-                        <Card key={item.courseId} className="border-l-4 border-l-primary shadow-sm">
+                        <Card key={item.courseId} className="border-l-4 border-l-green-500 shadow-sm animate-in slide-in-from-left-2">
                           <CardContent className="p-4 flex justify-between items-start gap-3">
                             <div>
                               <div className="font-bold text-sm md:text-base">{course.name}</div>
-                              <div className="text-xs text-muted-foreground mt-1">
-                                {course.id} • {course.credits} Créditos • Sec. {item.sectionCrn}
+                              <div className="text-xs text-muted-foreground mt-1 flex gap-2">
+                                <Badge variant="outline">{course.id}</Badge> 
+                                <span>{course.credits} Créditos</span>
                               </div>
-                              <div className="text-xs font-medium text-primary mt-2 bg-primary/10 inline-block px-2 py-1 rounded">
-                                {item.section.schedule?.map(s => `${s.day.substring(0,3)} ${s.startTime}`).join(', ') || 'Sin horario'} • {item.section.room}
+                              <div className="text-xs font-medium text-green-700 mt-2 bg-green-50 inline-block px-2 py-1 rounded border border-green-100">
+                                {item.section.schedule?.map(s => `${s.day.substring(0,3)} ${s.startTime}`).join(', ') || 'Horario por definir'} • {item.section.room || 'Aula N/A'}
                               </div>
                             </div>
-                            <Button size="icon" variant="ghost" className="h-8 w-8 text-muted-foreground hover:text-destructive" onClick={() => handleRemove(item.courseId)}>
+                            <Button size="icon" variant="ghost" className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10" onClick={() => handleRemove(item.courseId)}>
                               <Trash2 className="h-4 w-4" />
                             </Button>
                           </CardContent>
@@ -199,49 +197,47 @@ export function PlannerView() {
               </TabsContent>
             </div>
 
-            {/* COLUMNA 2: DISPONIBLES */}
+            {/* 2. DISPONIBLES (Manual Add) */}
             <div className={`md:col-span-5 lg:col-span-4 ${'md:block'}`}>
               <TabsContent value="available" className="mt-0 h-full space-y-4">
                 <h3 className="font-semibold text-lg hidden md:block mb-4">Agregar Materias</h3>
+                <p className="text-xs text-muted-foreground mb-2 md:hidden">Toca el selector para añadir al plan.</p>
                 
                 <div className="space-y-3">
                   {availableCourses.length === 0 ? (
-                    <div className="p-4 text-center text-sm text-muted-foreground">No hay más materias disponibles por ahora.</div>
+                    <div className="p-4 text-center text-sm text-muted-foreground">¡Felicidades! No tienes materias pendientes disponibles.</div>
                   ) : (
                     availableCourses.map(course => {
-                      // CORRECCIÓN CRÍTICA 3: Protección al filtrar secciones
-                      // Si allSections no es array (por algún error raro), esto evita el crash
-                      const sections = Array.isArray(allSections) 
-                        ? allSections.filter(s => s.courseId === course.id)
-                        : [];
+                      // USAMOS EL HELPER MEJORADO
+                      const sections = getSectionsForCourse(course.id);
                       
                       return (
-                        <Card key={course.id} className="bg-muted/30">
+                        <Card key={course.id} className="bg-muted/30 hover:bg-muted/50 transition-colors">
                           <CardContent className="p-3">
                             <div className="flex justify-between items-start">
-                              <div className="text-sm font-medium">{course.name}</div>
-                              <Badge variant="outline" className="text-[10px]">{course.id}</Badge>
+                              <div className="text-sm font-medium line-clamp-2">{course.name}</div>
+                              <Badge variant="secondary" className="text-[10px] shrink-0 ml-2">{course.id}</Badge>
                             </div>
                             <div className="text-xs text-muted-foreground mt-1 mb-3">
-                              Semestre {course.term} • {course.credits} Cr.
+                              Ciclo {course.term} • {course.credits} Créditos
                             </div>
                             
                             {sections.length > 0 ? (
                               <Select onValueChange={(val) => handleAddSection(course.id, val)}>
-                                <SelectTrigger className="h-8 text-xs w-full bg-background">
-                                  <SelectValue placeholder="Elegir sección..." />
+                                <SelectTrigger className="h-8 text-xs w-full bg-background border-primary/20 hover:border-primary/50">
+                                  <SelectValue placeholder="Seleccionar horario..." />
                                 </SelectTrigger>
                                 <SelectContent>
                                   {sections.map(s => (
                                     <SelectItem key={s.crn} value={s.crn} className="text-xs">
-                                      {s.schedule?.[0]?.day.substring(0,3)} {s.schedule?.[0]?.startTime} ({s.instructor})
+                                      {s.schedule?.[0]?.day.substring(0,3)} {s.schedule?.[0]?.startTime} ({s.instructor || 'Prof. TBA'})
                                     </SelectItem>
                                   ))}
                                 </SelectContent>
                               </Select>
                             ) : (
-                              <div className="text-xs text-red-400 flex items-center gap-1">
-                                <AlertCircle className="h-3 w-3" /> Sin secciones
+                              <div className="text-xs text-amber-500 flex items-center gap-1 bg-amber-50 p-1.5 rounded">
+                                <AlertCircle className="h-3 w-3" /> Sin secciones abiertas
                               </div>
                             )}
                           </CardContent>
