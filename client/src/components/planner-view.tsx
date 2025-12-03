@@ -50,14 +50,14 @@ export function PlannerView() {
     }
   }, [plan, loading]);
 
-  // --- MATERIAS DISPONIBLES (ORDENADAS POR PENSUM) ---
+  // --- MATERIAS DISPONIBLES ---
   const availableCourses = useMemo(() => {
     if (!Array.isArray(allCourses)) return [];
     return allCourses.filter(course => {
       if (plan.some(p => p.courseId === course.id)) return false; 
       const status = getCourseStatus(course, passedCourses);
       return status === 'available';
-    }).sort((a, b) => a.term - b.term); // Orden estricto por cuatrimestre
+    }).sort((a, b) => a.term - b.term);
   }, [allCourses, passedCourses, plan, getCourseStatus]);
 
   // --- TOTAL CRÉDITOS ---
@@ -66,14 +66,20 @@ export function PlannerView() {
     return sum + (c?.credits || 0);
   }, 0);
 
-  // --- HELPER PARA ENCONTRAR SECCIONES (ARREGLA EL BUG "SIN SECCIONES") ---
+  // --- HELPER BLINDADO PARA ENCONTRAR SECCIONES ---
   const getSectionsForCourse = (courseId: string) => {
     if (!Array.isArray(allSections)) return [];
-    // Compara ignorando guiones (MED-100 == MED100)
-    return allSections.filter(s => 
-      s.courseId === courseId || 
-      s.courseId.replace(/-/g, '') === courseId.replace(/-/g, '')
-    );
+    
+    return allSections.filter(s => {
+      // CORRECCIÓN SENIOR: Programación Defensiva
+      // Si la sección no tiene courseId (data sucia), la ignoramos y retornamos false.
+      if (!s.courseId) return false;
+
+      return (
+        s.courseId === courseId || 
+        s.courseId.replace(/-/g, '') === courseId.replace(/-/g, '')
+      );
+    });
   };
 
   // --- ACCIONES ---
@@ -81,7 +87,6 @@ export function PlannerView() {
     const section = allSections.find(s => s.crn === sectionCrn);
     if (!section) return;
 
-    // Verificar choques
     const conflict = plan.find(p => hasConflict(p.section, section));
     if (conflict) {
       const conflictCourse = allCourses.find(c => c.id === conflict.courseId);
@@ -89,7 +94,6 @@ export function PlannerView() {
       return;
     }
 
-    // Agregar al plan
     setPlan([...plan, { courseId, sectionCrn, section }]);
   };
 
@@ -100,7 +104,6 @@ export function PlannerView() {
   const handleAutoSuggest = () => {
     if (!confirm('¿Generar horario automático de hasta 31 créditos?\nSe priorizarán las materias por orden de pensum.')) return;
     
-    // Pasamos disponible + todas las secciones al algoritmo
     const suggestion = generateSuggestedPlan(availableCourses, allSections, plan);
     
     if (suggestion.length === plan.length) {
@@ -147,7 +150,6 @@ export function PlannerView() {
       {/* CONTENIDO PRINCIPAL */}
       <div className="flex-1 overflow-hidden">
         <Tabs defaultValue="selected" className="h-full flex flex-col">
-          {/* TAB LIST MÓVIL */}
           <div className="px-4 pt-2 md:hidden">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="selected">Seleccionadas ({plan.length})</TabsTrigger>
@@ -197,18 +199,16 @@ export function PlannerView() {
               </TabsContent>
             </div>
 
-            {/* 2. DISPONIBLES (Manual Add) */}
+            {/* 2. DISPONIBLES */}
             <div className={`md:col-span-5 lg:col-span-4 ${'md:block'}`}>
               <TabsContent value="available" className="mt-0 h-full space-y-4">
                 <h3 className="font-semibold text-lg hidden md:block mb-4">Agregar Materias</h3>
-                <p className="text-xs text-muted-foreground mb-2 md:hidden">Toca el selector para añadir al plan.</p>
                 
                 <div className="space-y-3">
                   {availableCourses.length === 0 ? (
                     <div className="p-4 text-center text-sm text-muted-foreground">¡Felicidades! No tienes materias pendientes disponibles.</div>
                   ) : (
                     availableCourses.map(course => {
-                      // USAMOS EL HELPER MEJORADO
                       const sections = getSectionsForCourse(course.id);
                       
                       return (
