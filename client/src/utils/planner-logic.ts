@@ -6,6 +6,13 @@ export interface PlannedSection {
   section: Section;
 }
 
+// --- UTILIDAD DE NORMALIZACIÓN NUCLEAR ---
+// Convierte "MED-100", "med 100", "MED_100" -> "MED100"
+export const normalizeId = (id: string | undefined): string => {
+  if (!id) return '';
+  return id.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+};
+
 const timeToMinutes = (time: string): number => {
   if (!time) return 0;
   const [hours, minutes] = time.split(':').map(Number);
@@ -56,15 +63,12 @@ export const generateSuggestedPlan = (
     if (newPlan.some(p => p.courseId === course.id)) continue;
     if (currentCredits + course.credits > maxCredits) continue;
 
-    // BLINDAJE AQUÍ TAMBIÉN:
+    // USAMOS LA NORMALIZACIÓN NUCLEAR
+    const normalizedCourseId = normalizeId(course.id);
+    
     const courseSections = allSections.filter(s => {
-      // Ignoramos secciones corruptas que no tienen courseId
       if (!s.courseId) return false;
-
-      return (
-        s.courseId === course.id || 
-        s.courseId.replace(/-/g, '') === course.id.replace(/-/g, '')
-      );
+      return normalizeId(s.courseId) === normalizedCourseId;
     });
 
     if (courseSections.length === 0) continue;

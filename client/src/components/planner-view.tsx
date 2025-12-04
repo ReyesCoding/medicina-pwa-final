@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useStudentProgress } from '@/contexts/student-progress-context';
 import { Course, Section } from '@/types';
-import { generateSuggestedPlan, hasConflict, PlannedSection } from '@/utils/planner-logic';
+import { generateSuggestedPlan, hasConflict, PlannedSection, normalizeId } from '@/utils/planner-logic';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -29,6 +29,11 @@ export function PlannerView() {
       const validCourses = Array.isArray(coursesData) ? coursesData : (coursesData.courses || []);
       const validSections = Array.isArray(sectionsData) ? sectionsData : (sectionsData.sections || sectionsData.courses || []);
 
+      // DEBUG: Ver qué data estamos recibiendo
+      console.log('DEBUG DATA LOADED:');
+      if(validCourses.length > 0) console.log('Sample Course ID:', validCourses[0].id, 'Normalized:', normalizeId(validCourses[0].id));
+      if(validSections.length > 0) console.log('Sample Section CourseID:', validSections[0].courseId, 'Normalized:', normalizeId(validSections[0].courseId));
+
       setAllCourses(validCourses);
       setAllSections(validSections);
       
@@ -43,14 +48,12 @@ export function PlannerView() {
     });
   }, []);
 
-  // Guardar plan
   useEffect(() => {
     if (!loading) {
       localStorage.setItem('medicina-planner-save', JSON.stringify(plan));
     }
   }, [plan, loading]);
 
-  // --- MATERIAS DISPONIBLES ---
   const availableCourses = useMemo(() => {
     if (!Array.isArray(allCourses)) return [];
     return allCourses.filter(course => {
@@ -60,29 +63,22 @@ export function PlannerView() {
     }).sort((a, b) => a.term - b.term);
   }, [allCourses, passedCourses, plan, getCourseStatus]);
 
-  // --- TOTAL CRÉDITOS ---
   const totalCredits = plan.reduce((sum, item) => {
     const c = allCourses.find(c => c.id === item.courseId);
     return sum + (c?.credits || 0);
   }, 0);
 
-  // --- HELPER BLINDADO PARA ENCONTRAR SECCIONES ---
+  // --- HELPER NORMALIZADO ---
   const getSectionsForCourse = (courseId: string) => {
     if (!Array.isArray(allSections)) return [];
+    const target = normalizeId(courseId);
     
     return allSections.filter(s => {
-      // CORRECCIÓN SENIOR: Programación Defensiva
-      // Si la sección no tiene courseId (data sucia), la ignoramos y retornamos false.
       if (!s.courseId) return false;
-
-      return (
-        s.courseId === courseId || 
-        s.courseId.replace(/-/g, '') === courseId.replace(/-/g, '')
-      );
+      return normalizeId(s.courseId) === target;
     });
   };
 
-  // --- ACCIONES ---
   const handleAddSection = (courseId: string, sectionCrn: string) => {
     const section = allSections.find(s => s.crn === sectionCrn);
     if (!section) return;
@@ -90,7 +86,7 @@ export function PlannerView() {
     const conflict = plan.find(p => hasConflict(p.section, section));
     if (conflict) {
       const conflictCourse = allCourses.find(c => c.id === conflict.courseId);
-      alert(`⚠️ Choque de horario con ${conflictCourse?.name || conflict.courseId}\n\nIntenta elegir otra sección.`);
+      alert(`⚠️ Choque de horario con ${conflictCourse?.name || conflict.courseId}`);
       return;
     }
 
@@ -102,155 +98,150 @@ export function PlannerView() {
   };
 
   const handleAutoSuggest = () => {
-    if (!confirm('¿Generar horario automático de hasta 31 créditos?\nSe priorizarán las materias por orden de pensum.')) return;
-    
+    if (!confirm('¿Generar horario automático?')) return;
     const suggestion = generateSuggestedPlan(availableCourses, allSections, plan);
     
     if (suggestion.length === plan.length) {
-      alert('No se encontraron más materias compatibles o secciones disponibles para agregar.');
+      alert('No se encontraron coincidencias. Revisa la consola para ver errores de datos.');
     } else {
       setPlan(suggestion);
     }
   };
 
-  if (loading) return <div className="p-8 text-center animate-pulse">Cargando materias...</div>;
+  if (loading) return <div className="p-8 text-center animate-pulse">Cargando...</div>;
+
+  // --- COMPONENTES DE UI REUTILIZABLES ---
+  
+  const SelectedList = () => (
+    <div className="space-y-4 h-full overflow-y-auto">
+      <h3 className="font-semibold text-lg mb-2 flex items-center gap-2">
+        <span className="bg-primary/10 text-primary px-2 py-0.5 rounded text-sm">{plan.length}</span>
+        Seleccionadas
+      </h3>
+      {plan.length === 0 ? (
+        <div className="text-center py-8 border-2 border-dashed rounded-xl bg-muted/10">
+          <p className="text-muted-foreground text-sm">Horario vacío.</p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {plan.map((item) => {
+            const course = allCourses.find(c => c.id === item.courseId);
+            if (!course) return null;
+            return (
+              <Card key={item.courseId} className="border-l-4 border-l-green-500 shadow-sm">
+                <CardContent className="p-3 flex justify-between items-start gap-2">
+                  <div className="overflow-hidden">
+                    <div className="font-bold text-sm truncate">{course.name}</div>
+                    <div className="text-xs text-muted-foreground mt-1">
+                      {item.section.schedule?.map(s => `${s.day.substring(0,3)} ${s.startTime}`).join(', ') || 'TBA'}
+                    </div>
+                  </div>
+                  <Button size="icon" variant="ghost" className="h-6 w-6 text-muted-foreground hover:text-destructive shrink-0" onClick={() => handleRemove(item.courseId)}>
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+
+  const AvailableList = () => (
+    <div className="space-y-4 h-full overflow-y-auto">
+      <h3 className="font-semibold text-lg mb-2">Disponibles</h3>
+      <div className="space-y-3">
+        {availableCourses.length === 0 ? (
+          <div className="p-4 text-center text-sm text-muted-foreground">No hay materias disponibles.</div>
+        ) : (
+          availableCourses.map(course => {
+            const sections = getSectionsForCourse(course.id);
+            return (
+              <Card key={course.id} className="bg-muted/30">
+                <CardContent className="p-3">
+                  <div className="flex justify-between items-start mb-2">
+                    <div className="text-sm font-medium leading-tight">{course.name}</div>
+                    <Badge variant="secondary" className="text-[10px] shrink-0 ml-1">{course.credits} Cr.</Badge>
+                  </div>
+                  
+                  {sections.length > 0 ? (
+                    <Select onValueChange={(val) => handleAddSection(course.id, val)}>
+                      <SelectTrigger className="h-8 text-xs w-full bg-background">
+                        <SelectValue placeholder="Elegir horario..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {sections.map(s => (
+                          <SelectItem key={s.crn} value={s.crn} className="text-xs">
+                            {s.schedule?.[0]?.day.substring(0,3)} {s.schedule?.[0]?.startTime} ({s.instructor || 'TBA'})
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  ) : (
+                    <div className="text-xs text-amber-500 flex items-center gap-1 bg-amber-50 p-1.5 rounded">
+                      <AlertCircle className="h-3 w-3" /> Sin secciones abiertas
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            );
+          })
+        )}
+      </div>
+    </div>
+  );
 
   return (
     <div className="flex flex-col h-full bg-background animate-in fade-in">
-      
       {/* HEADER */}
-      <div className="p-4 border-b bg-card flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div className="p-4 border-b bg-card flex flex-col md:flex-row justify-between items-start md:items-center gap-4 shrink-0">
         <div>
           <h2 className="text-xl font-bold flex items-center gap-2">
             <CalendarClock className="h-5 w-5 text-primary" />
             Mi Plan de Estudios
           </h2>
           <div className="text-sm text-muted-foreground mt-1">
-            Créditos Seleccionados: <span className={totalCredits > 31 ? "text-destructive font-bold" : "text-primary font-bold"}>{totalCredits}</span> / 31
+            Créditos: <span className={totalCredits > 31 ? "text-destructive font-bold" : "text-primary font-bold"}>{totalCredits}</span> / 31
           </div>
         </div>
-        
         <div className="flex gap-2 w-full md:w-auto">
-          <Button 
-            onClick={handleAutoSuggest} 
-            className="w-full md:w-auto bg-violet-600 hover:bg-violet-700 text-white shadow-md"
-            disabled={totalCredits >= 31}
-          >
-            <Sparkles className="h-4 w-4 mr-2" />
-            Sugerir Plan (Auto)
+          <Button onClick={handleAutoSuggest} className="w-full md:w-auto bg-violet-600 hover:bg-violet-700 text-white" disabled={totalCredits >= 31}>
+            <Sparkles className="h-4 w-4 mr-2" /> Sugerir Plan
           </Button>
           {plan.length > 0 && (
-             <Button variant="outline" onClick={() => setPlan([])} className="text-destructive border-destructive/50">
-               Limpiar
-             </Button>
+             <Button variant="outline" onClick={() => setPlan([])} className="text-destructive border-destructive/50">Limpiar</Button>
           )}
         </div>
       </div>
 
       {/* CONTENIDO PRINCIPAL */}
       <div className="flex-1 overflow-hidden">
-        <Tabs defaultValue="selected" className="h-full flex flex-col">
-          <div className="px-4 pt-2 md:hidden">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="selected">Seleccionadas ({plan.length})</TabsTrigger>
-              <TabsTrigger value="available">Disponibles</TabsTrigger>
-            </TabsList>
-          </div>
-
-          <div className="flex-1 overflow-auto p-4 md:p-6 grid md:grid-cols-12 gap-6">
-            
-            {/* 1. SELECCIONADAS */}
-            <div className={`md:col-span-7 lg:col-span-8 ${'md:block'}`}>
-              <TabsContent value="selected" className="mt-0 h-full space-y-4">
-                <h3 className="font-semibold text-lg hidden md:block mb-4">Materias Seleccionadas</h3>
-                
-                {plan.length === 0 ? (
-                  <div className="text-center py-12 border-2 border-dashed rounded-xl bg-muted/10">
-                    <p className="text-muted-foreground font-medium">Tu horario está vacío.</p>
-                    <p className="text-sm text-muted-foreground mt-1">Ve a "Disponibles" para elegir o usa "Sugerir Plan".</p>
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    {plan.map((item) => {
-                      const course = allCourses.find(c => c.id === item.courseId);
-                      if (!course) return null;
-                      return (
-                        <Card key={item.courseId} className="border-l-4 border-l-green-500 shadow-sm animate-in slide-in-from-left-2">
-                          <CardContent className="p-4 flex justify-between items-start gap-3">
-                            <div>
-                              <div className="font-bold text-sm md:text-base">{course.name}</div>
-                              <div className="text-xs text-muted-foreground mt-1 flex gap-2">
-                                <Badge variant="outline">{course.id}</Badge> 
-                                <span>{course.credits} Créditos</span>
-                              </div>
-                              <div className="text-xs font-medium text-green-700 mt-2 bg-green-50 inline-block px-2 py-1 rounded border border-green-100">
-                                {item.section.schedule?.map(s => `${s.day.substring(0,3)} ${s.startTime}`).join(', ') || 'Horario por definir'} • {item.section.room || 'Aula N/A'}
-                              </div>
-                            </div>
-                            <Button size="icon" variant="ghost" className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10" onClick={() => handleRemove(item.courseId)}>
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </CardContent>
-                        </Card>
-                      );
-                    })}
-                  </div>
-                )}
-              </TabsContent>
+        {/* LAYOUT MÓVIL (TABS) */}
+        <div className="md:hidden h-full flex flex-col">
+          <Tabs defaultValue="available" className="h-full flex flex-col">
+            <div className="px-4 pt-2 shrink-0">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="selected">Seleccionadas ({plan.length})</TabsTrigger>
+                <TabsTrigger value="available">Disponibles</TabsTrigger>
+              </TabsList>
             </div>
-
-            {/* 2. DISPONIBLES */}
-            <div className={`md:col-span-5 lg:col-span-4 ${'md:block'}`}>
-              <TabsContent value="available" className="mt-0 h-full space-y-4">
-                <h3 className="font-semibold text-lg hidden md:block mb-4">Agregar Materias</h3>
-                
-                <div className="space-y-3">
-                  {availableCourses.length === 0 ? (
-                    <div className="p-4 text-center text-sm text-muted-foreground">¡Felicidades! No tienes materias pendientes disponibles.</div>
-                  ) : (
-                    availableCourses.map(course => {
-                      const sections = getSectionsForCourse(course.id);
-                      
-                      return (
-                        <Card key={course.id} className="bg-muted/30 hover:bg-muted/50 transition-colors">
-                          <CardContent className="p-3">
-                            <div className="flex justify-between items-start">
-                              <div className="text-sm font-medium line-clamp-2">{course.name}</div>
-                              <Badge variant="secondary" className="text-[10px] shrink-0 ml-2">{course.id}</Badge>
-                            </div>
-                            <div className="text-xs text-muted-foreground mt-1 mb-3">
-                              Ciclo {course.term} • {course.credits} Créditos
-                            </div>
-                            
-                            {sections.length > 0 ? (
-                              <Select onValueChange={(val) => handleAddSection(course.id, val)}>
-                                <SelectTrigger className="h-8 text-xs w-full bg-background border-primary/20 hover:border-primary/50">
-                                  <SelectValue placeholder="Seleccionar horario..." />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  {sections.map(s => (
-                                    <SelectItem key={s.crn} value={s.crn} className="text-xs">
-                                      {s.schedule?.[0]?.day.substring(0,3)} {s.schedule?.[0]?.startTime} ({s.instructor || 'Prof. TBA'})
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                            ) : (
-                              <div className="text-xs text-amber-500 flex items-center gap-1 bg-amber-50 p-1.5 rounded">
-                                <AlertCircle className="h-3 w-3" /> Sin secciones abiertas
-                              </div>
-                            )}
-                          </CardContent>
-                        </Card>
-                      );
-                    })
-                  )}
-                </div>
-              </TabsContent>
+            <div className="flex-1 overflow-hidden p-4">
+              <TabsContent value="selected" className="h-full mt-0"><SelectedList /></TabsContent>
+              <TabsContent value="available" className="h-full mt-0"><AvailableList /></TabsContent>
             </div>
+          </Tabs>
+        </div>
 
+        {/* LAYOUT DESKTOP (GRID REAL - SIN TABS) */}
+        <div className="hidden md:grid md:grid-cols-12 h-full gap-6 p-6 overflow-hidden">
+          <div className="md:col-span-7 lg:col-span-8 h-full overflow-hidden border rounded-xl p-4 bg-muted/10">
+            <SelectedList />
           </div>
-        </Tabs>
+          <div className="md:col-span-5 lg:col-span-4 h-full overflow-hidden border rounded-xl p-4 bg-muted/10">
+            <AvailableList />
+          </div>
+        </div>
       </div>
     </div>
   );
