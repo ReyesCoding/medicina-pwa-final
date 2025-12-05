@@ -17,7 +17,21 @@ export function PlannerView() {
   const [plan, setPlan] = useState<PlannedSection[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Cargar datos
+  // Helper para formatear hora (13:45 -> 01:45 PM)
+  const formatTimeDisplay = (time: string) => {
+    if (!time || time === '00:00') return '';
+    const [h, m] = time.split(':');
+    const hour = parseInt(h);
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    const hour12 = hour % 12 || 12;
+    return `${hour12}:${m} ${ampm}`;
+  };
+
+  // Helper para días cortos
+  const formatDayDisplay = (day: string) => {
+    return day.substring(0, 3) + '.'; // Lun. Mar. Mié.
+  };
+
   useEffect(() => {
     const baseUrl = import.meta.env.BASE_URL; 
     
@@ -25,14 +39,8 @@ export function PlannerView() {
       fetch(`${baseUrl}data/courses.json`).then(r => r.json()),
       fetch(`${baseUrl}data/sections.json`).then(r => r.json())
     ]).then(([coursesData, sectionsData]) => {
-      
       const validCourses = Array.isArray(coursesData) ? coursesData : (coursesData.courses || []);
       const validSections = Array.isArray(sectionsData) ? sectionsData : (sectionsData.sections || sectionsData.courses || []);
-
-      // DEBUG: Ver qué data estamos recibiendo
-      console.log('DEBUG DATA LOADED:');
-      if(validCourses.length > 0) console.log('Sample Course ID:', validCourses[0].id, 'Normalized:', normalizeId(validCourses[0].id));
-      if(validSections.length > 0) console.log('Sample Section CourseID:', validSections[0].courseId, 'Normalized:', normalizeId(validSections[0].courseId));
 
       setAllCourses(validCourses);
       setAllSections(validSections);
@@ -68,15 +76,10 @@ export function PlannerView() {
     return sum + (c?.credits || 0);
   }, 0);
 
-  // --- HELPER NORMALIZADO ---
   const getSectionsForCourse = (courseId: string) => {
     if (!Array.isArray(allSections)) return [];
     const target = normalizeId(courseId);
-    
-    return allSections.filter(s => {
-      if (!s.courseId) return false;
-      return normalizeId(s.courseId) === target;
-    });
+    return allSections.filter(s => s.courseId && normalizeId(s.courseId) === target);
   };
 
   const handleAddSection = (courseId: string, sectionCrn: string) => {
@@ -89,7 +92,6 @@ export function PlannerView() {
       alert(`⚠️ Choque de horario con ${conflictCourse?.name || conflict.courseId}`);
       return;
     }
-
     setPlan([...plan, { courseId, sectionCrn, section }]);
   };
 
@@ -100,9 +102,8 @@ export function PlannerView() {
   const handleAutoSuggest = () => {
     if (!confirm('¿Generar horario automático?')) return;
     const suggestion = generateSuggestedPlan(availableCourses, allSections, plan);
-    
     if (suggestion.length === plan.length) {
-      alert('No se encontraron coincidencias. Revisa la consola para ver errores de datos.');
+      alert('No se encontraron más materias compatibles.');
     } else {
       setPlan(suggestion);
     }
@@ -110,10 +111,10 @@ export function PlannerView() {
 
   if (loading) return <div className="p-8 text-center animate-pulse">Cargando...</div>;
 
-  // --- COMPONENTES DE UI REUTILIZABLES ---
-  
+  // --- UI COMPONENTS ---
+
   const SelectedList = () => (
-    <div className="space-y-4 h-full overflow-y-auto">
+    <div className="space-y-4 h-full overflow-y-auto pb-20 md:pb-0">
       <h3 className="font-semibold text-lg mb-2 flex items-center gap-2">
         <span className="bg-primary/10 text-primary px-2 py-0.5 rounded text-sm">{plan.length}</span>
         Seleccionadas
@@ -133,7 +134,12 @@ export function PlannerView() {
                   <div className="overflow-hidden">
                     <div className="font-bold text-sm truncate">{course.name}</div>
                     <div className="text-xs text-muted-foreground mt-1">
-                      {item.section.schedule?.map(s => `${s.day.substring(0,3)} ${s.startTime}`).join(', ') || 'TBA'}
+                       {/* VISUALIZACIÓN AMIGABLE DE HORARIO */}
+                       {item.section.schedule?.map(s => 
+                         s.startTime === '00:00' ? 'Horario Rotativo/Virtual' : 
+                         `${formatDayDisplay(s.day)} ${formatTimeDisplay(s.startTime)} - ${formatTimeDisplay(s.endTime)}`
+                       ).join(' • ')}
+                       <span className="ml-2 px-1 bg-secondary rounded text-[10px]">{item.section.room}</span>
                     </div>
                   </div>
                   <Button size="icon" variant="ghost" className="h-6 w-6 text-muted-foreground hover:text-destructive shrink-0" onClick={() => handleRemove(item.courseId)}>
@@ -149,7 +155,7 @@ export function PlannerView() {
   );
 
   const AvailableList = () => (
-    <div className="space-y-4 h-full overflow-y-auto">
+    <div className="space-y-4 h-full overflow-y-auto pb-20 md:pb-0">
       <h3 className="font-semibold text-lg mb-2">Disponibles</h3>
       <div className="space-y-3">
         {availableCourses.length === 0 ? (
@@ -173,7 +179,10 @@ export function PlannerView() {
                       <SelectContent>
                         {sections.map(s => (
                           <SelectItem key={s.crn} value={s.crn} className="text-xs">
-                            {s.schedule?.[0]?.day.substring(0,3)} {s.schedule?.[0]?.startTime} ({s.instructor || 'TBA'})
+                             {/* OPCIONES DEL DROPDOWN AMIGABLES */}
+                             {s.schedule?.[0]?.startTime === '00:00' ? 'Horario Especial' :
+                               `${s.schedule?.[0]?.day} ${formatTimeDisplay(s.schedule?.[0]?.startTime || '')}`
+                             }
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -194,7 +203,6 @@ export function PlannerView() {
 
   return (
     <div className="flex flex-col h-full bg-background animate-in fade-in">
-      {/* HEADER */}
       <div className="p-4 border-b bg-card flex flex-col md:flex-row justify-between items-start md:items-center gap-4 shrink-0">
         <div>
           <h2 className="text-xl font-bold flex items-center gap-2">
@@ -215,9 +223,7 @@ export function PlannerView() {
         </div>
       </div>
 
-      {/* CONTENIDO PRINCIPAL */}
       <div className="flex-1 overflow-hidden">
-        {/* LAYOUT MÓVIL (TABS) */}
         <div className="md:hidden h-full flex flex-col">
           <Tabs defaultValue="available" className="h-full flex flex-col">
             <div className="px-4 pt-2 shrink-0">
@@ -233,7 +239,6 @@ export function PlannerView() {
           </Tabs>
         </div>
 
-        {/* LAYOUT DESKTOP (GRID REAL - SIN TABS) */}
         <div className="hidden md:grid md:grid-cols-12 h-full gap-6 p-6 overflow-hidden">
           <div className="md:col-span-7 lg:col-span-8 h-full overflow-hidden border rounded-xl p-4 bg-muted/10">
             <SelectedList />
