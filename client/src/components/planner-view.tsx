@@ -248,6 +248,19 @@ export function PlannerView() {
           </div>
         </div>
       </div>
+      <div className="mt-8 flex justify-center">
+  <button 
+    onClick={() => {
+      if(confirm('⚠️ ¿Estás seguro? Esto borrará TODAS tus materias aprobadas y tu plan guardado. Es irreversible.')) {
+        localStorage.clear();
+        window.location.reload();
+      }
+    }}
+    className="text-xs text-red-400 hover:text-red-600 underline"
+  >
+    Restablecer aplicación de fábrica
+  </button>
+</div>
     </div>
   );
 }

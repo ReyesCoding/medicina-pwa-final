@@ -1,12 +1,17 @@
-import { useState } from 'react';
+import { 
+  LayoutDashboard, 
+  BookOpen, 
+  GraduationCap, 
+  CalendarClock, 
+  Search,
+  Filter
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
-import { FilterState, CourseStatus } from '@/types';
-import { useCourseData } from '@/hooks/use-course-data';
-import { useStudentProgress } from '@/contexts/student-progress-context';
-import { List, ClipboardList, TrendingUp } from 'lucide-react';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Separator } from '@/components/ui/separator';
+import { Badge } from '@/components/ui/badge';
+import { FilterState } from '@/types';
 
 interface NavigationProps {
   filters: FilterState;
@@ -20,184 +25,138 @@ export function Navigation({
   filters, 
   onFiltersChange, 
   activeView, 
-  onViewChange, 
+  onViewChange,
   onShowPlanModal 
 }: NavigationProps) {
-  const { getAllTerms, courses } = useCourseData();
-  const { calculateGPA, getTotalCredits } = useStudentProgress();
-  
-  const terms = getAllTerms();
-  const gpa = calculateGPA();
 
-  const handleStatusFilter = (status: CourseStatus | 'all') => {
+  // Handlers para cambiar filtros de estado (Toggle)
+  const toggleStatus = (status: 'passed' | 'available' | null) => {
     onFiltersChange({
       ...filters,
-      status: status === 'all' ? null : status
+      status: filters.status === status ? null : status
     });
   };
 
   return (
-    <nav className="w-64 bg-card border-r border-border flex flex-col">
-      <div className="p-4 border-b border-border">
-        <div className="space-y-2">
-          <Button 
-            variant={activeView === 'courses' ? 'default' : 'ghost'}
-            className="w-full justify-start gap-3"
-            onClick={() => onViewChange('courses')}
-            data-testid="nav-course-list"
-          >
-            <List className="w-4 h-4" />
-            Lista de Materias
-          </Button>
-          <Button 
-            variant="ghost"
-            className="w-full justify-start gap-3"
-            onClick={onShowPlanModal}
-            data-testid="nav-my-plan"
-          >
-            <ClipboardList className="w-4 h-4" />
-            Mi Plan
-          </Button>
-          <Button 
-            variant={activeView === 'progress' ? 'default' : 'ghost'}
-            className="w-full justify-start gap-3"
-            onClick={() => onViewChange('progress')}
-            data-testid="nav-progress"
-          >
-            <TrendingUp className="w-4 h-4" />
-            Progreso
-          </Button>
-        </div>
-      </div>
+    // FIX VISUAL: h-full asegura que ocupe toda la altura disponible
+    <div className="w-full md:w-64 bg-card border-r flex flex-col h-full">
       
-      <div className="p-4 flex-1">
-        <div className="space-y-4">
-          <div>
-            <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-              Filtros
-            </label>
-            <div className="mt-2 space-y-2">
-              <Select 
-                value={filters.term?.toString() || ""} 
-                onValueChange={(value) => onFiltersChange({
-                  ...filters,
-                  term: value && value !== "all" ? parseInt(value) : null
-                })}
-              >
-                <SelectTrigger data-testid="filter-term">
-                  <SelectValue placeholder="Todos los Semestres" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Todos los Semestres</SelectItem>
-                  {terms.map(term => (
-                    <SelectItem key={term.term} value={term.term.toString()}>
-                      Semestre {term.term} - {term.block}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+      {/* 1. SECCIÓN SUPERIOR: MENÚ PRINCIPAL */}
+      <div className="p-4 space-y-2 shrink-0">
+        <Button 
+          variant={activeView === 'courses' ? 'secondary' : 'ghost'} 
+          className="w-full justify-start text-base font-medium"
+          onClick={() => onViewChange('courses')}
+        >
+          <BookOpen className="mr-2 h-5 w-5 text-primary" />
+          Catálogo de Materias
+        </Button>
+
+        <Button 
+          variant={activeView === 'planner' ? 'secondary' : 'ghost'} 
+          className="w-full justify-start text-base font-medium"
+          onClick={() => onViewChange('planner')}
+        >
+          <CalendarClock className="mr-2 h-5 w-5 text-violet-500" />
+          Mi Plan (Horario)
+        </Button>
+
+        <Button 
+          variant={activeView === 'progress' ? 'secondary' : 'ghost'} 
+          className="w-full justify-start text-base font-medium"
+          onClick={() => onViewChange('progress')}
+        >
+          <GraduationCap className="mr-2 h-5 w-5 text-emerald-500" />
+          Mi Progreso
+        </Button>
+      </div>
+
+      <Separator />
+
+      {/* 2. SECCIÓN CENTRAL: FILTROS
+          FIX VISUAL: flex-1 y overflow-hidden obligan a esta parte a ocupar 
+          el espacio sobrante, empujando el footer hacia abajo si fuera necesario
+          o permitiendo scroll si la pantalla es chica.
+      */}
+      <div className="flex-1 overflow-hidden flex flex-col">
+        <ScrollArea className="flex-1">
+          <div className="p-4 space-y-6">
+            
+            {/* Buscador */}
+            <div className="space-y-2">
+              <h3 className="text-sm font-semibold text-muted-foreground flex items-center">
+                <Search className="h-4 w-4 mr-2" /> BUSCAR
+              </h3>
+              <Input 
+                placeholder="Código o nombre..." 
+                value={filters.searchTerm}
+                onChange={(e) => onFiltersChange({...filters, searchTerm: e.target.value})}
+                className="bg-background"
+              />
+            </div>
+
+            {/* Filtros de Estado */}
+            <div className="space-y-3">
+              <h3 className="text-sm font-semibold text-muted-foreground flex items-center">
+                <Filter className="h-4 w-4 mr-2" /> FILTROS
+              </h3>
               
-              <div className="flex flex-wrap gap-1">
-                <Button
-                  size="sm"
-                  variant={filters.status === null ? "default" : "outline"}
-                  className="text-xs"
-                  onClick={() => handleStatusFilter('all')}
-                  data-testid="filter-all"
+              <div className="flex flex-wrap gap-2">
+                <Badge 
+                  variant={filters.status === null ? 'default' : 'outline'}
+                  className="cursor-pointer hover:bg-primary/80"
+                  onClick={() => toggleStatus(null)}
                 >
                   Todas
-                </Button>
-                <Button
-                  size="sm"
-                  variant={filters.status === 'available' ? "default" : "outline"}
-                  className="text-xs"
-                  onClick={() => handleStatusFilter('available')}
-                  data-testid="filter-available"
+                </Badge>
+                <Badge 
+                  variant={filters.status === 'available' ? 'default' : 'outline'}
+                  className={`cursor-pointer hover:bg-primary/80 ${filters.status === 'available' ? 'bg-green-600 hover:bg-green-700 border-green-600' : ''}`}
+                  onClick={() => toggleStatus('available')}
                 >
                   Disponibles
-                </Button>
-                <Button
-                  size="sm"
-                  variant={filters.status === 'blocked' ? "default" : "outline"}
-                  className="text-xs"
-                  onClick={() => handleStatusFilter('blocked')}
-                  data-testid="filter-blocked"
-                >
-                  Bloqueadas
-                </Button>
-                <Button
-                  size="sm"
-                  variant={filters.status === 'passed' ? "default" : "outline"}
-                  className="text-xs"
-                  onClick={() => handleStatusFilter('passed')}
-                  data-testid="filter-passed"
-                >
-                  Aprobadas
-                </Button>
+                </Badge>
               </div>
               
-              <div className="space-y-1">
-                <div className="flex items-center space-x-2">
-                  <Checkbox 
-                    id="electives" 
-                    checked={filters.electivesOnly}
-                    onCheckedChange={(checked) => onFiltersChange({
-                      ...filters,
-                      electivesOnly: !!checked
-                    })}
-                    data-testid="filter-electives-only"
-                  />
-                  <label htmlFor="electives" className="text-sm text-foreground">
-                    Solo electivas
-                  </label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Checkbox 
-                    id="in-plan" 
-                    checked={filters.inPlanOnly}
-                    onCheckedChange={(checked) => onFiltersChange({
-                      ...filters,
-                      inPlanOnly: !!checked
-                    })}
-                    data-testid="filter-in-plan"
-                  />
-                  <label htmlFor="in-plan" className="text-sm text-foreground">
-                    En mi plan
-                  </label>
-                </div>
+              <div className="pt-2 space-y-2">
+                 <label className="flex items-center gap-2 text-sm cursor-pointer p-1 hover:bg-muted rounded select-none">
+                    <input 
+                      type="checkbox"
+                      className="rounded border-gray-300"
+                      checked={filters.electivesOnly}
+                      onChange={(e) => onFiltersChange({...filters, electivesOnly: e.target.checked})}
+                    />
+                    <span>Solo Electivas</span>
+                 </label>
               </div>
             </div>
+
+            {/* Selector de Ciclo */}
+             <div className="space-y-2">
+               <h3 className="text-sm font-semibold text-muted-foreground">CICLO / SEMESTRE</h3>
+               <select 
+                 className="w-full p-2 rounded-md border bg-background text-sm"
+                 value={filters.term || ''}
+                 onChange={(e) => onFiltersChange({
+                   ...filters, 
+                   term: e.target.value ? Number(e.target.value) : null
+                 })}
+               >
+                 <option value="">Todos los Ciclos</option>
+                 {Array.from({length: 18}, (_, i) => (
+                   <option key={i+1} value={i+1}>Ciclo {i+1}</option>
+                 ))}
+               </select>
+             </div>
+
           </div>
-          
-          <div className="pt-4 border-t border-border">
-            <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-              Buscar
-            </label>
-            <Input 
-              type="text" 
-              placeholder="Código o nombre de materia..." 
-              className="mt-2"
-              value={filters.searchTerm}
-              onChange={(e) => onFiltersChange({
-                ...filters,
-                searchTerm: e.target.value
-              })}
-              data-testid="search-input"
-            />
-          </div>
-        </div>
+        </ScrollArea>
       </div>
-      
-      <div className="p-4 border-t border-border">
-        <div className="text-xs text-muted-foreground space-y-1">
-          <div data-testid="nav-credits">
-            Créditos del Plan: <span className="font-medium text-foreground">0/22</span>
-          </div>
-          <div data-testid="nav-gpa">
-            Índice: <span className="font-medium text-foreground">{gpa.toFixed(2)}</span>
-          </div>
-        </div>
+
+      {/* 3. FOOTER DEL MENÚ */}
+      <div className="p-4 border-t bg-muted/20 text-center shrink-0">
+        <p className="text-xs text-muted-foreground">v1.0.0 • Medicina PWA</p>
       </div>
-    </nav>
+    </div>
   );
 }

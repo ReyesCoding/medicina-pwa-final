@@ -1,4 +1,4 @@
-Estado	Clave	Nombre asignatura	Horario	Aula	Carreras
+Estado	Clave	Nombre asignatura			Aula	Carreras
 MED100001	BIOLOGIA I	J1:45 a 4:00 pm (Presencial)	B105	
 MED100003	BIOLOGIA I	J10:45 a 1:00 pm (Presencial)	A404	
 MED100005	BIOLOGIA I	J4:00 a 6:15 pm (Presencial)	A502	
