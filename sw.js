@@ -1,5 +1,5 @@
 // VERSIÓN ESTABLE - SIN BUCLE
-const CACHE_VERSION = 'FIX-v-UPDATED-2025-12-05';
+const CACHE_VERSION = 'v-ADMIN-FIX-2025-12-03';
 const CACHE_NAME = `medicina-pwa-${CACHE_VERSION}`;
 
 const ASSETS = [
