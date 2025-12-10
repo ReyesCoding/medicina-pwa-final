@@ -6,6 +6,7 @@ import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { hasScheduleConflict } from '@/utils/sections-processor';
 
+// --- TIPOS ---
 type Course = {
   id: string;
   name: string;
@@ -30,60 +31,73 @@ type Props = {
   setSectionsForCourse: (courseId: string, nextList: any[]) => Promise<void>;
 };
 
-// --- Utilidades de normalización de horarios ---
-// Dataset: { day, startTime, endTime }   UI/Validación: { day, start, end } (24h "HH:MM")
+// --- HELPERS DE TIEMPO (ROBUSTOS) ---
+
+// Normaliza la estructura del JSON para que la UI la entienda
 function normalizeSections(list: any[]) {
   return list.map((sec) => ({
     ...sec,
+    // La UI espera 'start' y 'end', el JSON usa 'startTime' y 'endTime'. Normalizamos aquí.
     schedule: (sec.schedule || []).map((b: any) => ({
       day: b.day,
-      start: b.start ?? b.startTime,
-      end: b.end ?? b.endTime,
+      start: b.startTime ?? b.start, 
+      end: b.endTime ?? b.end,
     })),
   }));
 }
 
+// Desnormaliza para guardar en el JSON con el formato correcto
 function denormalizeSections(list: any[]) {
   return list.map((sec) => ({
     ...sec,
     schedule: (sec.schedule || []).map((b: any) => ({
       day: b.day,
-      startTime: b.start,
-      endTime: b.end,
+      startTime: b.start, // Guardamos como startTime
+      endTime: b.end,     // Guardamos como endTime
     })),
   }));
 }
 
-// --- Conversión 24h <-> 12h con AM/PM ---
+// Convierte "14:30" -> { time: "02:30", ap: "PM" }
 function to12h(hhmm: string | undefined): { time: string; ap: 'AM' | 'PM' } {
   if (!hhmm) return { time: '07:00', ap: 'AM' };
   const [hStr, mStr] = hhmm.split(':');
   let h = parseInt(hStr, 10);
   const m = mStr ?? '00';
+  
+  if (isNaN(h)) h = 7; // Fallback seguro
+  
   const ap: 'AM' | 'PM' = h >= 12 ? 'PM' : 'AM';
   h = h % 12;
   if (h === 0) h = 12;
+  
   const t = `${String(h).padStart(2, '0')}:${m}`;
   return { time: t, ap };
 }
 
+// Convierte "02:30" + "PM" -> "14:30"
 function to24h(time12: string, ap: 'AM' | 'PM'): string {
-  // time12: "hh:mm" 1..12
   const [hStr, mStr] = time12.split(':');
-  let h = Math.max(1, Math.min(12, parseInt(hStr || '12', 10) || 12));
-  const m = mStr ?? '00';
+  let h = parseInt(hStr || '12', 10);
+  let m = parseInt(mStr || '00', 10);
+
+  // Validación estricta
+  if (isNaN(h)) h = 12;
+  if (isNaN(m)) m = 0;
+  h = Math.max(1, Math.min(12, h));
+  m = Math.max(0, Math.min(59, m));
+
   if (ap === 'AM') {
     if (h === 12) h = 0;
   } else {
     if (h !== 12) h += 12;
   }
-  return `${String(h).padStart(2, '0')}:${m.padStart(2, '0')}`;
+  
+  return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
 }
 
-// Días admitidos por el dataset y UI (largos + abreviados)
 const DAY_OPTIONS = [
-  'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday',
-  'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun',
+  'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'
 ];
 
 export default function EditCourseDialog({
@@ -95,110 +109,40 @@ export default function EditCourseDialog({
   getSectionsForCourse,
   setSectionsForCourse,
 }: Props) {
-  // --------- Datos básicos (curso) ----------
+  
+  // --- ESTADO DEL FORMULARIO ---
   const [form, setForm] = useState<Course>(course);
-  const [filter, setFilter] = useState(''); // búsqueda para prereq/coreq
+  const [filter, setFilter] = useState('');
+  
+  // --- ESTADO DE SECCIONES ---
+  const [sections, setSections] = useState<any[]>([]);
+  const [secFilter, setSecFilter] = useState('');
+  const [newSec, setNewSec] = useState<{ crn: string; room: string }>({ crn: '', room: '' });
+  
+  // Estado temporal para editar bloques de tiempo (día, hora inicio, hora fin)
+  const [newBlock, setNewBlock] = useState<{
+    [crn: string]: { day: string; timeStart12: string; apStart: 'AM' | 'PM'; timeEnd12: string; apEnd: 'AM' | 'PM' }
+  }>({});
 
-  useEffect(() => setForm(course), [course]);
+  const [banner, setBanner] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
-  const courseIds = useMemo(() => new Set(allCourses.map(c => c.id)), [allCourses]);
+  // --- EFECTO DE CARGA ---
+  useEffect(() => {
+    setForm(course);
+    const raw = getSectionsForCourse(course.id) || [];
+    const normalized = normalizeSections(raw);
+    setSections(normalized);
+    setBanner(null);
+    setNewBlock({}); // Limpiar inputs temporales
+  }, [course, getSectionsForCourse]);
 
+  // --- FILTROS ---
   const filteredList = useMemo(() => {
     const f = filter.trim().toLowerCase();
     return allCourses
       .filter(c => c.id !== form.id)
       .filter(c => c.id.toLowerCase().includes(f) || c.name.toLowerCase().includes(f));
   }, [allCourses, filter, form.id]);
-
-  const toggleInList = (key: 'prerequisites' | 'corequisites', id: string) => {
-    const list = new Set(form[key] ?? []);
-    if (list.has(id)) list.delete(id); else list.add(id);
-    setForm({ ...form, [key]: Array.from(list) });
-  };
-
-  const handleNumber = (k: keyof Course) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    const v = Number(e.target.value || 0);
-    setForm({ ...form, [k]: isNaN(v) ? 0 : v });
-  };
-
-  const handleText = (k: keyof Course) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [k]: e.target.value });
-  };
-
-  const validate = (): string | null => {
-    if (!form.id || !/^[A-Za-z]{3}-?\d{3}$/.test(form.id)) return 'ID inválido (ej: MED101 o MED-101)';
-    if (!form.name) return 'Nombre requerido';
-    if (form.credits < 0) return 'Créditos no pueden ser negativos';
-    if (!Number.isInteger(form.term) || form.term <= 0) return 'Term debe ser un entero positivo';
-    for (const id of (form.prerequisites ?? [])) if (!courseIds.has(id)) return `Prereq no existe: ${id}`;
-    for (const id of (form.corequisites ?? [])) if (!courseIds.has(id)) return `Coreq no existe: ${id}`;
-    if ((form.prerequisites ?? []).includes(form.id)) return 'Un curso no puede ser prerequisito de sí mismo';
-    if ((form.corequisites ?? []).includes(form.id)) return 'Un curso no puede ser correquisito de sí mismo';
-    return null;
-  };
-
-  // banner inline
-  const [banner, setBanner] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
-
-  const handleSave = () => {
-    const err = validate();
-    if (err) {
-      setBanner({ type: 'error', text: err });
-      return;
-    }
-    onSave({
-      ...form,
-      prerequisites: Array.from(new Set(form.prerequisites ?? [])),
-      corequisites: Array.from(new Set(form.corequisites ?? [])),
-    });
-    setBanner({ type: 'success', text: 'Datos del curso guardados.' });
-  };
-
-  // --------- Secciones (estado local + UI sin alerts) ----------
-  const [sections, setSections] = useState<any[]>([]);
-  const [secFilter, setSecFilter] = useState(''); // búsqueda para secciones
-
-  // mini-UI para crear sección
-  const [newSec, setNewSec] = useState<{ crn: string; room: string }>({ crn: '', room: '' });
-
-  // mini-UI para añadir bloque por sección (controlado por s.crn)
-  // guardamos los inputs 12h y AM/PM por sección antes de convertir a 24h
-  const [newBlock, setNewBlock] = useState<{
-    [crn: string]: { day: string; timeStart12: string; apStart: 'AM' | 'PM'; timeEnd12: string; apEnd: 'AM' | 'PM' }
-  }>({});
-
-  useEffect(() => {
-    const raw = getSectionsForCourse(course.id) || [];
-    const normalized = Array.isArray(raw) ? normalizeSections(raw) : [];
-    setSections(normalized);
-
-    // Prefill por cada sección con primer bloque si existe (para que AM/PM arranque en la hora real)
-    const seed: Record<string, any> = {};
-    for (const s of normalized) {
-      const first = (s.schedule || [])[0];
-      if (first) {
-        const st = to12h(first.start);
-        const en = to12h(first.end);
-        seed[s.crn] = {
-          day: first.day ?? 'Monday',
-          timeStart12: st.time,
-          apStart: st.ap,
-          timeEnd12: en.time,
-          apEnd: en.ap,
-        };
-      } else {
-        seed[s.crn] = {
-          day: 'Monday',
-          timeStart12: '07:00',
-          apStart: 'AM',
-          timeEnd12: '09:00',
-          apEnd: 'AM',
-        };
-      }
-    }
-    setNewBlock(seed);
-    setBanner(null);
-  }, [course.id, getSectionsForCourse]);
 
   const filteredSections = useMemo(() => {
     const q = secFilter.trim().toLowerCase();
@@ -209,499 +153,308 @@ export default function EditCourseDialog({
     );
   }, [sections, secFilter]);
 
-  const addSection = () => {
-    const crn = newSec.crn.trim();
-    if (!crn) return setBanner({ type: 'error', text: 'CRN requerido.' });
-    if (sections.some(s => s.crn === crn)) {
-      return setBanner({ type: 'error', text: 'CRN ya existe.' });
-    }
-    const room = newSec.room.trim();
-    const newEntry = { crn, room, closed: false, schedule: [] as Array<{ day: string; start: string; end: string }> };
-    setSections(prev => [...prev, newEntry]);
-
-    // Semilla para AM/PM de esta nueva sección
-    setNewBlock(prev => ({
-      ...prev,
-      [crn]: {
-        day: 'Monday',
-        timeStart12: '07:00',
-        apStart: 'AM',
-        timeEnd12: '09:00',
-        apEnd: 'AM',
-      }
-    }));
-
-    setNewSec({ crn: '', room: '' });
-    setBanner({ type: 'success', text: `Sección ${crn} agregada.` });
+  // --- HANDLERS CURSO ---
+  const handleText = (k: keyof Course) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm({ ...form, [k]: e.target.value });
   };
 
-  const editSectionInline = (crn: string, field: 'room' | 'closed', value: any) => {
-    setSections(prev => prev.map(s => s.crn === crn ? { ...s, [field]: value } : s));
+  const handleNumber = (k: keyof Course) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const v = Number(e.target.value || 0);
+    setForm({ ...form, [k]: isNaN(v) ? 0 : v });
+  };
+
+  const toggleInList = (key: 'prerequisites' | 'corequisites', id: string) => {
+    const list = new Set(form[key] ?? []);
+    if (list.has(id)) list.delete(id); else list.add(id);
+    setForm({ ...form, [key]: Array.from(list) });
+  };
+
+  const handleSaveCourse = () => {
+    onSave({
+      ...form,
+      prerequisites: Array.from(new Set(form.prerequisites ?? [])),
+      corequisites: Array.from(new Set(form.corequisites ?? [])),
+    });
+    setBanner({ type: 'success', text: 'Curso actualizado correctamente.' });
+  };
+
+  // --- HANDLERS SECCIONES ---
+  const addSection = () => {
+    const crn = newSec.crn.trim();
+    if (!crn) return setBanner({ type: 'error', text: 'El CRN es obligatorio.' });
+    if (sections.some(s => s.crn === crn)) return setBanner({ type: 'error', text: 'El CRN ya existe.' });
+
+    const newEntry = { 
+      crn, 
+      room: newSec.room.trim(), 
+      closed: false, 
+      schedule: [] 
+    };
+    setSections(prev => [...prev, newEntry]);
+    setNewSec({ crn: '', room: '' });
+    setBanner({ type: 'success', text: 'Sección agregada.' });
   };
 
   const deleteSection = (crn: string) => {
     setSections(prev => prev.filter(s => s.crn !== crn));
-    setBanner({ type: 'success', text: `Sección ${crn} eliminada.` });
+  };
+
+  const editSectionInline = (crn: string, field: string, value: any) => {
+    setSections(prev => prev.map(s => s.crn === crn ? { ...s, [field]: value } : s));
+  };
+
+  // --- HANDLERS HORARIOS ---
+  
+  // Helper para inicializar el estado temporal de un bloque si no existe
+  const initBlockState = (crn: string) => {
+    if (!newBlock[crn]) {
+      setNewBlock(prev => ({
+        ...prev,
+        [crn]: { day: 'Lunes', timeStart12: '07:00', apStart: 'AM', timeEnd12: '09:00', apEnd: 'AM' }
+      }));
+    }
+  };
+
+  const updateBlockState = (crn: string, field: string, value: any) => {
+    initBlockState(crn);
+    setNewBlock(prev => ({
+      ...prev,
+      [crn]: { ...prev[crn], [field]: value }
+    }));
   };
 
   const addTimeBlock = (crn: string) => {
-    const cfg = newBlock[crn] || {
-      day: 'Monday',
-      timeStart12: '07:00',
-      apStart: 'AM',
-      timeEnd12: '09:00',
-      apEnd: 'AM',
-    };
-    if (!cfg.day || !cfg.timeStart12 || !cfg.timeEnd12) {
-      return setBanner({ type: 'error', text: 'Completa día, hora de inicio y fin.' });
+    const state = newBlock[crn] || { day: 'Lunes', timeStart12: '07:00', apStart: 'AM', timeEnd12: '09:00', apEnd: 'AM' };
+    
+    // Validar formato hh:mm simple
+    if (!/^\d{1,2}:\d{2}$/.test(state.timeStart12) || !/^\d{1,2}:\d{2}$/.test(state.timeEnd12)) {
+      return setBanner({type: 'error', text: 'Formato de hora inválido. Usa hh:mm'});
     }
-    const start24 = to24h(cfg.timeStart12, cfg.apStart);
-    const end24 = to24h(cfg.timeEnd12, cfg.apEnd);
 
-    setSections(prev => prev.map(s =>
-      s.crn === crn
-        ? { ...s, schedule: [...(s.schedule || []), { day: cfg.day, start: start24, end: end24 }] }
-        : s
-    ));
+    const start24 = to24h(state.timeStart12, state.apStart);
+    const end24 = to24h(state.timeEnd12, state.apEnd);
 
-    // Mantén los valores actuales como defaults para el próximo bloque
-    setBanner({ type: 'success', text: `Bloque agregado a ${crn}.` });
-  };
-
-  const removeTimeBlock = (crn: string, i: number) => {
-    setSections(prev => prev.map(s =>
-      s.crn === crn
-        ? { ...s, schedule: (s.schedule || []).filter((_: any, k: number) => k !== i) }
-        : s
+    setSections(prev => prev.map(s => 
+      s.crn === crn 
+      ? { ...s, schedule: [...(s.schedule || []), { day: state.day, start: start24, end: end24 }] }
+      : s
     ));
   };
 
-  const validateConflicts = (): string[] => {
-    const msgs: string[] = [];
-    for (let i = 0; i < sections.length; i++) {
-      for (let j = i + 1; j < sections.length; j++) {
-        const s1 = sections[i];
-        const s2 = sections[j];
-        if (hasScheduleConflict(s1, s2)) {
-          msgs.push(`Conflicto entre ${s1.crn} y ${s2.crn}`);
-        }
-      }
-    }
-    return msgs;
+  const removeTimeBlock = (crn: string, index: number) => {
+    setSections(prev => prev.map(s => 
+      s.crn === crn 
+      ? { ...s, schedule: s.schedule.filter((_:any, i:number) => i !== index) }
+      : s
+    ));
   };
 
   const saveSections = async () => {
-    const conflicts = validateConflicts();
-    if (conflicts.length > 0) {
-      setBanner({ type: 'error', text: `Conflictos:\n${conflicts.join('\n')}` });
-      return;
+    // Validar conflictos internos
+    for (let i = 0; i < sections.length; i++) {
+      for (let j = i + 1; j < sections.length; j++) {
+        if (hasScheduleConflict(sections[i], sections[j])) {
+          setBanner({ type: 'error', text: `Conflicto de horario entre ${sections[i].crn} y ${sections[j].crn}` });
+          return;
+        }
+      }
     }
+
     const payload = denormalizeSections(sections);
     await setSectionsForCourse(form.id, payload);
-    setBanner({ type: 'success', text: `Secciones guardadas para ${form.id}.` });
-  };
-
-  const sectionHasConflict = (crn: string) => {
-    const me = sections.find(s => s.crn === crn);
-    if (!me) return false;
-    return sections.some(other =>
-      other.crn !== crn && hasScheduleConflict(me, other)
-    );
+    setBanner({ type: 'success', text: 'Horarios guardados exitosamente.' });
   };
 
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
-      <DialogContent className="max-w-3xl max-h-[85vh] overflow-y-auto">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto flex flex-col">
         <DialogHeader>
-          <DialogTitle>Editar curso {course.id}</DialogTitle>
-          <DialogDescription className="sr-only">
-            Edita datos básicos, prerrequisitos, correquisitos y secciones.
-          </DialogDescription>
+          <DialogTitle>Editar Curso: {form.id}</DialogTitle>
+          <DialogDescription>Modifica los detalles del curso y sus horarios.</DialogDescription>
         </DialogHeader>
 
         {banner && (
-          <div
-            className={`mb-3 rounded border p-2 text-sm ${
-              banner.type === 'error'
-                ? 'border-destructive text-destructive'
-                : 'border-green-600 text-green-700'
-            }`}
-          >
-            {banner.text.split('\n').map((line, i) => <div key={i}>{line}</div>)}
+          <div className={`p-3 rounded text-sm mb-2 ${banner.type === 'error' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
+            {banner.text}
           </div>
         )}
 
-        <Tabs defaultValue="data" className="mt-2">
-          <TabsList>
-            <TabsTrigger value="data">Datos básicos</TabsTrigger>
-            <TabsTrigger value="sections">Secciones</TabsTrigger>
+        <Tabs defaultValue="data" className="flex-1">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="data">Información General</TabsTrigger>
+            <TabsTrigger value="sections">Secciones y Horarios</TabsTrigger>
           </TabsList>
 
-          {/* Pestaña 1: Datos básicos */}
-          <TabsContent value="data" className="space-y-3">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          {/* TAB 1: DATOS GENERALES */}
+          <TabsContent value="data" className="space-y-4 py-4">
+            <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="text-xs">ID</label>
-                <Input className="h-8 text-sm" value={form.id} onChange={handleText('id')} />
+                <label className="text-xs font-medium">ID Curso</label>
+                <Input value={form.id} onChange={handleText('id')} disabled />
               </div>
               <div>
-                <label className="text-xs">Nombre</label>
-                <Input className="h-8 text-sm" value={form.name} onChange={handleText('name')} />
+                <label className="text-xs font-medium">Nombre</label>
+                <Input value={form.name} onChange={handleText('name')} />
               </div>
               <div>
-                <label className="text-xs">Créditos</label>
-                <Input className="h-8 text-sm" type="number" value={form.credits} onChange={handleNumber('credits')} />
+                <label className="text-xs font-medium">Créditos</label>
+                <Input type="number" value={form.credits} onChange={handleNumber('credits')} />
               </div>
               <div>
-                <label className="text-xs">Horas teóricas</label>
-                <Input className="h-8 text-sm" type="number" value={form.theoreticalHours} onChange={handleNumber('theoreticalHours')} />
-              </div>
-              <div>
-                <label className="text-xs">Horas prácticas</label>
-                <Input className="h-8 text-sm" type="number" value={form.practicalHours} onChange={handleNumber('practicalHours')} />
-              </div>
-              <div>
-                <label className="text-xs">Term</label>
-                <Input className="h-8 text-sm" type="number" value={form.term} onChange={handleNumber('term')} />
+                <label className="text-xs font-medium">Cuatrimestre</label>
+                <Input type="number" value={form.term} onChange={handleNumber('term')} />
               </div>
             </div>
 
-            <Separator className="my-2" />
-
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <div className="font-medium text-sm">Prerequisitos</div>
-                <Input
-                  placeholder="Buscar curso…"
-                  value={filter}
-                  onChange={(e) => setFilter(e.target.value)}
-                  className="max-w-xs h-8 text-xs"
-                />
-              </div>
-              <div className="max-h-48 overflow-auto border rounded p-2 space-y-1">
-                {filteredList.map(c => {
-                  const checked = (form.prerequisites ?? []).includes(c.id);
-                  return (
-                    <label key={`pre-${c.id}`} className="flex items-center gap-2 text-sm">
-                      <input
-                        type="checkbox"
-                        checked={checked}
+            <Separator />
+            
+            <div className="grid grid-cols-2 gap-6">
+              <div>
+                <div className="mb-2 text-sm font-medium">Prerrequisitos</div>
+                <Input placeholder="Buscar..." value={filter} onChange={e => setFilter(e.target.value)} className="h-8 text-xs mb-2" />
+                <div className="border rounded h-40 overflow-y-auto p-2 space-y-1">
+                  {filteredList.map(c => (
+                    <label key={c.id} className="flex items-center gap-2 text-xs cursor-pointer hover:bg-muted p-1 rounded">
+                      <input 
+                        type="checkbox" 
+                        checked={(form.prerequisites || []).includes(c.id)} 
                         onChange={() => toggleInList('prerequisites', c.id)}
                       />
-                      <span className="font-medium">{c.id}</span>
-                      <span className="text-muted-foreground"> — {c.name}</span>
+                      <span className="font-bold">{c.id}</span>
+                      <span className="truncate">{c.name}</span>
                     </label>
-                  );
-                })}
+                  ))}
+                </div>
               </div>
-            </div>
-
-            <div className="space-y-2">
-              <div className="font-medium text-sm mt-3">Correquisitos</div>
-              <div className="max-h-48 overflow-auto border rounded p-2 space-y-1">
-                {filteredList.map(c => {
-                  const checked = (form.corequisites ?? []).includes(c.id);
-                  return (
-                    <label key={`co-${c.id}`} className="flex items-center gap-2 text-sm">
-                      <input
-                        type="checkbox"
-                        checked={checked}
+              
+              <div>
+                <div className="mb-2 text-sm font-medium">Correquisitos</div>
+                <div className="border rounded h-40 overflow-y-auto p-2 space-y-1 mt-10">
+                  {filteredList.map(c => (
+                    <label key={c.id} className="flex items-center gap-2 text-xs cursor-pointer hover:bg-muted p-1 rounded">
+                      <input 
+                        type="checkbox" 
+                        checked={(form.corequisites || []).includes(c.id)} 
                         onChange={() => toggleInList('corequisites', c.id)}
                       />
-                      <span className="font-medium">{c.id}</span>
-                      <span className="text-muted-foreground"> — {c.name}</span>
+                      <span className="font-bold">{c.id}</span>
+                      <span className="truncate">{c.name}</span>
                     </label>
-                  );
-                })}
+                  ))}
+                </div>
               </div>
             </div>
 
-            <div className="flex justify-end gap-2 mt-3">
-              <Button variant="outline" onClick={onClose}>Cancelar</Button>
-              <Button onClick={handleSave}>Guardar datos</Button>
+            <div className="flex justify-end pt-4">
+              <Button onClick={handleSaveCourse}>Guardar Cambios del Curso</Button>
             </div>
           </TabsContent>
 
-          {/* Pestaña 2: Secciones */}
-          <TabsContent value="sections" className="space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="font-medium text-sm">Secciones del curso {form.id}</div>
-              <div className="flex items-center gap-2">
-                <Input
-                  placeholder="Buscar por CRN/Aula…"
-                  value={secFilter}
-                  onChange={(e) => setSecFilter(e.target.value)}
-                  className="h-8 text-xs max-w-xs"
-                />
-                <Button size="sm" variant="outline" onClick={saveSections}>Guardar secciones</Button>
-              </div>
+          {/* TAB 2: SECCIONES */}
+          <TabsContent value="sections" className="space-y-4 py-4">
+            <div className="flex items-center gap-2 mb-4">
+              <Input placeholder="Nueva Sección (CRN)" value={newSec.crn} onChange={e => setNewSec({...newSec, crn: e.target.value})} className="w-40" />
+              <Input placeholder="Aula" value={newSec.room} onChange={e => setNewSec({...newSec, room: e.target.value})} className="w-24" />
+              <Button onClick={addSection} size="sm" variant="secondary">Agregar</Button>
+              <div className="flex-1" />
+              <Input placeholder="Filtrar..." value={secFilter} onChange={e => setSecFilter(e.target.value)} className="w-40 h-9" />
             </div>
 
-            {/* Agregar sección inline */}
-            <div className="flex flex-wrap items-center gap-2 border rounded p-2">
-              <Input
-                placeholder="CRN (ej. MED100001)"
-                value={newSec.crn}
-                onChange={(e) => setNewSec({ ...newSec, crn: e.target.value })}
-                className="h-8 text-xs max-w-[200px]"
-              />
-              <Input
-                placeholder="Aula (ej. A-101)"
-                value={newSec.room}
-                onChange={(e) => setNewSec({ ...newSec, room: e.target.value })}
-                className="h-8 text-xs max-w-[160px]"
-              />
-              <Button size="sm" onClick={addSection}>Agregar sección</Button>
-            </div>
-
-            {/* Lista de secciones */}
-            <div className="space-y-2">
-              {filteredSections.map((s) => (
-                <div key={s.crn} className="border rounded p-2">
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2">
-                      <div className="text-sm font-medium">{s.crn}</div>
-                      {sectionHasConflict(s.crn) && (
-                        <span className="text-xs px-2 py-0.5 rounded-full border border-destructive text-destructive">
-                          Conflicto
-                        </span>
-                      )}
+            <div className="space-y-4 max-h-[50vh] overflow-y-auto pr-2">
+              {filteredSections.map(section => (
+                <div key={section.crn} className="border rounded-lg p-3 bg-card">
+                  {/* Encabezado Sección */}
+                  <div className="flex justify-between items-center mb-3">
+                    <div className="flex items-center gap-3">
+                      <span className="font-bold text-lg">{section.crn}</span>
+                      <Input 
+                        value={section.room} 
+                        onChange={e => editSectionInline(section.crn, 'room', e.target.value)} 
+                        className="h-7 w-20 text-xs" 
+                        placeholder="Aula"
+                      />
                     </div>
-                    <div className="flex items-center gap-2">
-                      <label className="text-xs flex items-center gap-1">
-                        <span>Aula</span>
-                        <Input
-                          value={s.room || ''}
-                          onChange={(e) => editSectionInline(s.crn, 'room', e.target.value)}
-                          className="h-8 text-xs w-[140px]"
-                        />
-                      </label>
-                      <label className="text-xs flex items-center gap-1">
-                        <input
-                          type="checkbox"
-                          checked={!!s.closed}
-                          onChange={(e) => editSectionInline(s.crn, 'closed', e.target.checked)}
-                        />
-                        <span>Cerrada</span>
-                      </label>
-                      <Button size="sm" variant="destructive" onClick={() => deleteSection(s.crn)}>Eliminar</Button>
-                    </div>
+                    <Button variant="destructive" size="sm" className="h-7 text-xs" onClick={() => deleteSection(section.crn)}>
+                      Eliminar Sección
+                    </Button>
                   </div>
 
-                  <Separator className="my-2" />
-
-                  {/* Bloques existentes */}
-                  <div className="space-y-1">
-                    {(s.schedule || []).map((b: any, i: number) => {
-                      const st12 = to12h(b.start);
-                      const en12 = to12h(b.end);
+                  {/* Lista de Horarios */}
+                  <div className="space-y-2 mb-3">
+                    {section.schedule?.map((block: any, idx: number) => {
+                      const start = to12h(block.start);
+                      const end = to12h(block.end);
                       return (
-                        <div key={i} className="flex flex-wrap items-center gap-2 text-xs">
-                          {/* Día */}
-                          <select
-                            value={b.day ?? 'Monday'}
-                            onChange={(e) => {
-                              const day = e.target.value;
-                              setSections(prev => prev.map(sec =>
-                                sec.crn === s.crn
-                                  ? {
-                                      ...sec,
-                                      schedule: sec.schedule.map((bx: any, k: number) =>
-                                        k === i ? { ...bx, day } : bx
-                                      )
-                                    }
-                                  : sec
-                              ));
-                            }}
-                            className="h-8 px-2 border rounded bg-background text-foreground"
-                          >
-                            {DAY_OPTIONS.map(d => <option key={d} value={d}>{d}</option>)}
-                          </select>
-
-                          {/* Inicio 12h */}
-                          <Input
-                            value={st12.time}
-                            onChange={(e) => {
-                              const t24 = to24h(e.target.value, st12.ap);
-                              setSections(prev => prev.map(sec =>
-                                sec.crn === s.crn
-                                  ? {
-                                      ...sec,
-                                      schedule: sec.schedule.map((bx: any, k: number) =>
-                                        k === i ? { ...bx, start: t24 } : bx
-                                      )
-                                    }
-                                  : sec
-                              ));
-                            }}
-                            className="h-8 text-xs w-[90px]"
-                            placeholder="hh:mm"
-                          />
-                          <select
-                            value={st12.ap}
-                            onChange={(e) => {
-                              const ap = e.target.value as 'AM' | 'PM';
-                              const now12 = to12h(b.start).time; // leer de estado actual
-                              const t24 = to24h(now12, ap);
-                              setSections(prev => prev.map(sec =>
-                                sec.crn === s.crn
-                                  ? {
-                                      ...sec,
-                                      schedule: sec.schedule.map((bx: any, k: number) =>
-                                        k === i ? { ...bx, start: t24 } : bx
-                                      )
-                                    }
-                                  : sec
-                              ));
-                            }}
-                            className="h-8 px-2 border rounded bg-background text-foreground"
-                          >
-                            <option>AM</option>
-                            <option>PM</option>
-                          </select>
-
-                          <span className="opacity-60">—</span>
-
-                          {/* Fin 12h */}
-                          <Input
-                            value={en12.time}
-                            onChange={(e) => {
-                              const t24 = to24h(e.target.value, en12.ap);
-                              setSections(prev => prev.map(sec =>
-                                sec.crn === s.crn
-                                  ? {
-                                      ...sec,
-                                      schedule: sec.schedule.map((bx: any, k: number) =>
-                                        k === i ? { ...bx, end: t24 } : bx
-                                      )
-                                    }
-                                  : sec
-                              ));
-                            }}
-                            className="h-8 text-xs w-[90px]"
-                            placeholder="hh:mm"
-                          />
-                          <select
-                            value={en12.ap}
-                            onChange={(e) => {
-                              const ap = e.target.value as 'AM' | 'PM';
-                              const now12 = to12h(b.end).time;
-                              const t24 = to24h(now12, ap);
-                              setSections(prev => prev.map(sec =>
-                                sec.crn === s.crn
-                                  ? {
-                                      ...sec,
-                                      schedule: sec.schedule.map((bx: any, k: number) =>
-                                        k === i ? { ...bx, end: t24 } : bx
-                                      )
-                                    }
-                                  : sec
-                              ));
-                            }}
-                            className="h-8 px-2 border rounded bg-background text-foreground"
-                          >
-                            <option>AM</option>
-                            <option>PM</option>
-                          </select>
-
-                          <Button size="sm" variant="ghost" onClick={() => removeTimeBlock(s.crn, i)}>Quitar</Button>
+                        <div key={idx} className="flex items-center gap-2 text-sm bg-muted/30 p-1 rounded px-2">
+                          <span className="font-medium w-20">{block.day}</span>
+                          <span>{start.time} {start.ap}</span>
+                          <span>-</span>
+                          <span>{end.time} {end.ap}</span>
+                          <div className="flex-1" />
+                          <button onClick={() => removeTimeBlock(section.crn, idx)} className="text-red-500 hover:underline text-xs">Quitar</button>
                         </div>
                       );
                     })}
+                  </div>
 
-                    {/* Añadir bloque (usa buffer por sección con 12h/AM-PM) */}
-                    <div className="flex flex-wrap items-center gap-2 mt-2">
-                      {/* Día */}
-                      <select
-                        value={(newBlock[s.crn]?.day) ?? 'Monday'}
-                        onChange={(e) =>
-                          setNewBlock(prev => ({
-                            ...prev,
-                            [s.crn]: { ...(prev[s.crn] || {
-                              day: 'Monday', timeStart12: '07:00', apStart: 'AM', timeEnd12: '09:00', apEnd: 'AM'
-                            }), day: e.target.value }
-                          }))
-                        }
-                        className="h-8 px-2 border rounded bg-background text-foreground"
-                      >
-                        {DAY_OPTIONS.map(d => <option key={d} value={d}>{d}</option>)}
-                      </select>
+                  {/* Agregar Horario */}
+                  <div className="flex items-center gap-2 bg-muted p-2 rounded text-sm">
+                    <span className="text-xs font-medium text-muted-foreground uppercase">Nuevo Horario:</span>
+                    
+                    <select 
+                      className="h-8 border rounded text-xs bg-background"
+                      value={newBlock[section.crn]?.day || 'Lunes'}
+                      onChange={e => updateBlockState(section.crn, 'day', e.target.value)}
+                    >
+                      {DAY_OPTIONS.map(d => <option key={d} value={d}>{d}</option>)}
+                    </select>
 
-                      {/* Inicio */}
-                      <Input
-                        value={(newBlock[s.crn]?.timeStart12) ?? '07:00'}
-                        onChange={(e) =>
-                          setNewBlock(prev => ({
-                            ...prev,
-                            [s.crn]: { ...(prev[s.crn] || {
-                              day: 'Monday', timeStart12: '07:00', apStart: 'AM', timeEnd12: '09:00', apEnd: 'AM'
-                            }), timeStart12: e.target.value }
-                          }))
-                        }
-                        className="h-8 text-xs w-[90px]"
-                        placeholder="hh:mm"
+                    {/* Inicio */}
+                    <div className="flex items-center bg-background border rounded px-1">
+                      <input 
+                        className="w-10 h-8 text-xs text-center outline-none bg-transparent"
+                        value={newBlock[section.crn]?.timeStart12 || '07:00'}
+                        onChange={e => updateBlockState(section.crn, 'timeStart12', e.target.value)}
+                        placeholder="07:00"
                       />
-                      <select
-                        value={(newBlock[s.crn]?.apStart) ?? 'AM'}
-                        onChange={(e) =>
-                          setNewBlock(prev => ({
-                            ...prev,
-                            [s.crn]: { ...(prev[s.crn] || {
-                              day: 'Monday', timeStart12: '07:00', apStart: 'AM', timeEnd12: '09:00', apEnd: 'AM'
-                            }), apStart: e.target.value as 'AM' | 'PM' }
-                          }))
-                        }
-                        className="h-8 px-2 border rounded bg-background text-foreground"
+                      <select 
+                        className="h-8 text-xs bg-transparent outline-none"
+                        value={newBlock[section.crn]?.apStart || 'AM'}
+                        onChange={e => updateBlockState(section.crn, 'apStart', e.target.value)}
                       >
-                        <option>AM</option>
-                        <option>PM</option>
+                        <option>AM</option><option>PM</option>
                       </select>
-
-                      <span className="opacity-60">—</span>
-
-                      {/* Fin */}
-                      <Input
-                        value={(newBlock[s.crn]?.timeEnd12) ?? '09:00'}
-                        onChange={(e) =>
-                          setNewBlock(prev => ({
-                            ...prev,
-                            [s.crn]: { ...(prev[s.crn] || {
-                              day: 'Monday', timeStart12: '07:00', apStart: 'AM', timeEnd12: '09:00', apEnd: 'AM'
-                            }), timeEnd12: e.target.value }
-                          }))
-                        }
-                        className="h-8 text-xs w-[90px]"
-                        placeholder="hh:mm"
-                      />
-                      <select
-                        value={(newBlock[s.crn]?.apEnd) ?? 'AM'}
-                        onChange={(e) =>
-                          setNewBlock(prev => ({
-                            ...prev,
-                            [s.crn]: { ...(prev[s.crn] || {
-                              day: 'Monday', timeStart12: '07:00', apStart: 'AM', timeEnd12: '09:00', apEnd: 'AM'
-                            }), apEnd: e.target.value as 'AM' | 'PM' }
-                          }))
-                        }
-                        className="h-8 px-2 border rounded bg-background text-foreground"
-                      >
-                        <option>AM</option>
-                        <option>PM</option>
-                      </select>
-
-                      <Button size="sm" variant="outline" onClick={() => addTimeBlock(s.crn)}>Agregar bloque</Button>
                     </div>
+
+                    <span>a</span>
+
+                    {/* Fin */}
+                    <div className="flex items-center bg-background border rounded px-1">
+                      <input 
+                        className="w-10 h-8 text-xs text-center outline-none bg-transparent"
+                        value={newBlock[section.crn]?.timeEnd12 || '09:00'}
+                        onChange={e => updateBlockState(section.crn, 'timeEnd12', e.target.value)}
+                        placeholder="09:00"
+                      />
+                      <select 
+                        className="h-8 text-xs bg-transparent outline-none"
+                        value={newBlock[section.crn]?.apEnd || 'AM'}
+                        onChange={e => updateBlockState(section.crn, 'apEnd', e.target.value)}
+                      >
+                        <option>AM</option><option>PM</option>
+                      </select>
+                    </div>
+
+                    <Button size="sm" variant="outline" className="h-8 ml-auto" onClick={() => addTimeBlock(section.crn)}>
+                      +
+                    </Button>
                   </div>
                 </div>
               ))}
-              {filteredSections.length === 0 && (
-                <div className="text-sm text-muted-foreground">No hay secciones</div>
-              )}
             </div>
 
-            <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={onClose}>Cerrar</Button>
-              <Button onClick={saveSections}>Guardar secciones</Button>
+            <div className="flex justify-end pt-4 border-t mt-4">
+              <Button onClick={saveSections} className="w-full md:w-auto">Guardar Todos los Horarios</Button>
             </div>
           </TabsContent>
         </Tabs>
