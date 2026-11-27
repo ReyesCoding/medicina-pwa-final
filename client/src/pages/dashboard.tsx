@@ -3,7 +3,6 @@ import { ProgressHeader } from '@/components/progress-header';
 import { Navigation } from '@/components/navigation';
 import { CourseList } from '@/components/course-list';
 import { CourseDetail } from '@/components/course-detail';
-import { AdminPanel } from '@/components/admin-panel';
 import { StatsView } from '@/components/stats-view';
 import { PlannerView } from '@/components/planner-view'; // <--- IMPORTAMOS LA NUEVA VISTA
 import { Course, FilterState } from '@/types';
@@ -158,8 +157,6 @@ export function Dashboard() {
         </div>
       )}
 
-      {/* Admin Panel siempre presente pero oculto */}
-      <AdminPanel />
     </div>
   );
 }
