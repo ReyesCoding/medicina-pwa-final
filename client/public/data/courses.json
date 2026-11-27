@@ -6,12 +6,10 @@
     "theoreticalHours": 64,
     "practicalHours": 0,
     "term": 1,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Curso de lengua española enfocado en comunicación y redacción."
+    "corequisites": []
   },
   {
     "id": "ING-100",
@@ -20,12 +18,10 @@
     "theoreticalHours": 64,
     "practicalHours": 0,
     "term": 1,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Curso de idioma inglés para desarrollo de competencias comunicativas."
+    "corequisites": []
   },
   {
     "id": "MAT-095",
@@ -34,12 +30,10 @@
     "theoreticalHours": 64,
     "practicalHours": 0,
     "term": 1,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Curso de matemáticas aplicadas a las ciencias médicas."
+    "corequisites": []
   },
   {
     "id": "MED-010",
@@ -48,14 +42,12 @@
     "theoreticalHours": 0,
     "practicalHours": 32,
     "term": 1,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [],
     "corequisites": [
       "MED-100"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-100",
@@ -64,14 +56,12 @@
     "theoreticalHours": 48,
     "practicalHours": 0,
     "term": 1,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [],
     "corequisites": [
       "MED-010"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "ORI-112",
@@ -80,12 +70,10 @@
     "theoreticalHours": 32,
     "practicalHours": 0,
     "term": 1,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Curso de orientación para el desarrollo académico y profesional."
+    "corequisites": []
   },
   {
     "id": "SOC-116",
@@ -94,12 +82,10 @@
     "theoreticalHours": 64,
     "practicalHours": 0,
     "term": 1,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Curso de ciencias sociales aplicadas al contexto médico."
+    "corequisites": []
   },
   {
     "id": "ESP-181",
@@ -108,14 +94,12 @@
     "theoreticalHours": 64,
     "practicalHours": 0,
     "term": 2,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [
       "ESP-095"
     ],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Curso de lengua española enfocado en comunicación y redacción."
+    "corequisites": []
   },
   {
     "id": "ING-110",
@@ -124,14 +108,12 @@
     "theoreticalHours": 64,
     "practicalHours": 0,
     "term": 2,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [
       "ING-100"
     ],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Curso de idioma inglés para desarrollo de competencias comunicativas."
+    "corequisites": []
   },
   {
     "id": "MAT-100",
@@ -140,14 +122,12 @@
     "theoreticalHours": 64,
     "practicalHours": 0,
     "term": 2,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [
       "MAT-095"
     ],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Curso de matemáticas aplicadas a las ciencias médicas."
+    "corequisites": []
   },
   {
     "id": "SOC-110",
@@ -156,12 +136,10 @@
     "theoreticalHours": 48,
     "practicalHours": 0,
     "term": 2,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Curso de ciencias sociales aplicadas al contexto médico."
+    "corequisites": []
   },
   {
     "id": "SOC-150",
@@ -170,12 +148,10 @@
     "theoreticalHours": 32,
     "practicalHours": 0,
     "term": 2,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Curso de ciencias sociales aplicadas al contexto médico."
+    "corequisites": []
   },
   {
     "id": "SOC-180",
@@ -184,12 +160,10 @@
     "theoreticalHours": 48,
     "practicalHours": 0,
     "term": 2,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Curso de ciencias sociales aplicadas al contexto médico."
+    "corequisites": []
   },
   {
     "id": "SOC-700",
@@ -198,12 +172,10 @@
     "theoreticalHours": 32,
     "practicalHours": 0,
     "term": 2,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Curso de ciencias sociales aplicadas al contexto médico."
+    "corequisites": []
   },
   {
     "id": "ESP-189",
@@ -212,14 +184,12 @@
     "theoreticalHours": 64,
     "practicalHours": 0,
     "term": 3,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [
       "ESP-181"
     ],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Curso de lengua española enfocado en comunicación y redacción."
+    "corequisites": []
   },
   {
     "id": "ING-120",
@@ -228,14 +198,12 @@
     "theoreticalHours": 64,
     "practicalHours": 0,
     "term": 3,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [
       "ING-110"
     ],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Curso de idioma inglés para desarrollo de competencias comunicativas."
+    "corequisites": []
   },
   {
     "id": "MAT-110",
@@ -244,14 +212,12 @@
     "theoreticalHours": 64,
     "practicalHours": 0,
     "term": 3,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [
       "MAT-100"
     ],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Curso de matemáticas aplicadas a las ciencias médicas."
+    "corequisites": []
   },
   {
     "id": "MED-344",
@@ -260,12 +226,10 @@
     "theoreticalHours": 32,
     "practicalHours": 0,
     "term": 3,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    "corequisites": []
   },
   {
     "id": "MED-750",
@@ -274,16 +238,14 @@
     "theoreticalHours": 48,
     "practicalHours": 0,
     "term": 3,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [
       "MAT-100"
     ],
     "corequisites": [
       "MED-755"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-755",
@@ -292,16 +254,14 @@
     "theoreticalHours": 0,
     "practicalHours": 32,
     "term": 3,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [
       "MAT-100"
     ],
     "corequisites": [
       "MED-750"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "SIC-102",
@@ -310,12 +270,10 @@
     "theoreticalHours": 64,
     "practicalHours": 0,
     "term": 3,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura de psicología aplicada a la práctica médica."
+    "corequisites": []
   },
   {
     "id": "SOC-420",
@@ -324,12 +282,10 @@
     "theoreticalHours": 48,
     "practicalHours": 0,
     "term": 3,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Curso de ciencias sociales aplicadas al contexto médico."
+    "corequisites": []
   },
   {
     "id": "INF-103",
@@ -338,12 +294,10 @@
     "theoreticalHours": 16,
     "practicalHours": 32,
     "term": 4,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Curso de informática y tecnologías aplicadas a la salud."
+    "corequisites": []
   },
   {
     "id": "ING-130",
@@ -352,14 +306,12 @@
     "theoreticalHours": 64,
     "practicalHours": 0,
     "term": 4,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [
       "ING-120"
     ],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Curso de idioma inglés para desarrollo de competencias comunicativas."
+    "corequisites": []
   },
   {
     "id": "MAT-190",
@@ -368,16 +320,14 @@
     "theoreticalHours": 64,
     "practicalHours": 0,
     "term": 4,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [
       "MAT-100"
     ],
     "corequisites": [
       "MAT-191"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Curso de matemáticas aplicadas a las ciencias médicas."
+    ]
   },
   {
     "id": "MAT-191",
@@ -386,16 +336,14 @@
     "theoreticalHours": 0,
     "practicalHours": 32,
     "term": 4,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [
       "MAT-100"
     ],
     "corequisites": [
       "MAT-190"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Curso de matemáticas aplicadas a las ciencias médicas."
+    ]
   },
   {
     "id": "MED-150",
@@ -404,12 +352,10 @@
     "theoreticalHours": 32,
     "practicalHours": 0,
     "term": 4,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    "corequisites": []
   },
   {
     "id": "MED-760",
@@ -418,17 +364,15 @@
     "theoreticalHours": 48,
     "practicalHours": 0,
     "term": 4,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [
       "MED-750",
       "MED-755"
     ],
     "corequisites": [
       "MED-765"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-765",
@@ -437,17 +381,15 @@
     "theoreticalHours": 0,
     "practicalHours": 32,
     "term": 4,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [
       "MED-750",
       "MED-755"
     ],
     "corequisites": [
       "MED-760"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "SIC-400",
@@ -456,14 +398,12 @@
     "theoreticalHours": 64,
     "practicalHours": 0,
     "term": 4,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [
       "SIC-102"
     ],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura de psicología aplicada a la práctica médica."
+    "corequisites": []
   },
   {
     "id": "ING-140",
@@ -472,14 +412,12 @@
     "theoreticalHours": 64,
     "practicalHours": 0,
     "term": 5,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [
       "ING-130"
     ],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Curso de idioma inglés para desarrollo de competencias comunicativas."
+    "corequisites": []
   },
   {
     "id": "MED-160",
@@ -488,14 +426,12 @@
     "theoreticalHours": 48,
     "practicalHours": 32,
     "term": 5,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [
       "MAT-110"
     ],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    "corequisites": []
   },
   {
     "id": "MED-203",
@@ -504,14 +440,12 @@
     "theoreticalHours": 32,
     "practicalHours": 32,
     "term": 5,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [
       "INF-103"
     ],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    "corequisites": []
   },
   {
     "id": "MED-401",
@@ -520,15 +454,13 @@
     "theoreticalHours": 64,
     "practicalHours": 0,
     "term": 5,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [
       "MAT-190",
       "MAT-191"
     ],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    "corequisites": []
   },
   {
     "id": "MED-770",
@@ -537,17 +469,15 @@
     "theoreticalHours": 48,
     "practicalHours": 0,
     "term": 5,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [
       "MED-760",
       "MED-765"
     ],
     "corequisites": [
       "MED-774"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-774",
@@ -556,17 +486,15 @@
     "theoreticalHours": 0,
     "practicalHours": 32,
     "term": 5,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [
       "MED-760",
       "MED-765"
     ],
     "corequisites": [
       "MED-770"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "SOC-280",
@@ -575,12 +503,10 @@
     "theoreticalHours": 48,
     "practicalHours": 0,
     "term": 5,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Curso de ciencias sociales aplicadas al contexto médico."
+    "corequisites": []
   },
   {
     "id": "ECO-101",
@@ -589,40 +515,10 @@
     "theoreticalHours": 32,
     "practicalHours": 0,
     "term": 6,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Curso de economía aplicada al sector salud."
-  },
-  {
-    "id": "ENF-101",
-    "name": "CURSO DE ENFERMERIA BÁSICA",
-    "credits": 4,
-    "theoreticalHours": 48,
-    "practicalHours": 32,
-    "term": 6,
-    "block": "PREMÉDICA",
-    "prerequisites": [],
-    "corequisites": [],
-    "isElective": true,
-    "electiveType": "general",
-    "description": "Curso complementario de enfermería básica."
-  },
-  {
-    "id": "ING-160",
-    "name": "INGLES TÉCNICO MÉDICO",
-    "credits": 4,
-    "theoreticalHours": 64,
-    "practicalHours": 0,
-    "term": 6,
-    "block": "PREMÉDICA",
-    "prerequisites": [],
-    "corequisites": [],
-    "isElective": true,
-    "electiveType": "general",
-    "description": "Curso de idioma inglés para desarrollo de competencias comunicativas."
+    "corequisites": []
   },
   {
     "id": "MED-110",
@@ -631,12 +527,10 @@
     "theoreticalHours": 32,
     "practicalHours": 0,
     "term": 6,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    "corequisites": []
   },
   {
     "id": "MED-395",
@@ -645,17 +539,15 @@
     "theoreticalHours": 32,
     "practicalHours": 0,
     "term": 6,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [
       "MED-010",
       "MED-100"
     ],
     "corequisites": [
       "MED-396"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-396",
@@ -664,17 +556,15 @@
     "theoreticalHours": 0,
     "practicalHours": 32,
     "term": 6,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [
       "MED-010",
       "MED-100"
     ],
     "corequisites": [
       "MED-395"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-397",
@@ -683,17 +573,15 @@
     "theoreticalHours": 32,
     "practicalHours": 0,
     "term": 6,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [
       "MED-010",
       "MED-100"
     ],
     "corequisites": [
       "MED-398"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-398",
@@ -702,17 +590,15 @@
     "theoreticalHours": 0,
     "practicalHours": 32,
     "term": 6,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [
       "MED-010",
       "MED-100"
     ],
     "corequisites": [
       "MED-397"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-632",
@@ -721,15 +607,13 @@
     "theoreticalHours": 48,
     "practicalHours": 32,
     "term": 6,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [
       "MED-010",
       "MED-100"
     ],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    "corequisites": []
   },
   {
     "id": "MED-775",
@@ -738,17 +622,15 @@
     "theoreticalHours": 48,
     "practicalHours": 0,
     "term": 6,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [
       "MED-770",
       "MED-774"
     ],
     "corequisites": [
       "MED-776"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-776",
@@ -757,87 +639,15 @@
     "theoreticalHours": 0,
     "practicalHours": 32,
     "term": 6,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [
       "MED-770",
       "MED-774"
     ],
     "corequisites": [
       "MED-775"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
-  },
-  {
-    "id": "MED-986",
-    "name": "SALUD SEXUAL Y REPRODUCTIVA",
-    "credits": 4,
-    "theoreticalHours": 64,
-    "practicalHours": 0,
-    "term": 6,
-    "block": "PREMÉDICA",
-    "prerequisites": [],
-    "corequisites": [],
-    "isElective": true,
-    "electiveType": "general",
-    "description": "Asignatura médica fundamental para la formación profesional."
-  },
-  {
-    "id": "MED-995",
-    "name": "MORAL MÉDICA",
-    "credits": 2,
-    "theoreticalHours": 32,
-    "practicalHours": 0,
-    "term": 6,
-    "block": "PREMÉDICA",
-    "prerequisites": [],
-    "corequisites": [],
-    "isElective": true,
-    "electiveType": "general",
-    "description": "Asignatura médica fundamental para la formación profesional."
-  },
-  {
-    "id": "MED-996",
-    "name": "SALUD OCUPACIONAL",
-    "credits": 2,
-    "theoreticalHours": 32,
-    "practicalHours": 0,
-    "term": 6,
-    "block": "PREMÉDICA",
-    "prerequisites": [],
-    "corequisites": [],
-    "isElective": true,
-    "electiveType": "general",
-    "description": "Asignatura médica fundamental para la formación profesional."
-  },
-  {
-    "id": "MED-997",
-    "name": "ADMINISTRACION DE SERVICIOS DE SALUD",
-    "credits": 4,
-    "theoreticalHours": 64,
-    "practicalHours": 0,
-    "term": 6,
-    "block": "PREMÉDICA",
-    "prerequisites": [],
-    "corequisites": [],
-    "isElective": true,
-    "electiveType": "general",
-    "description": "Asignatura médica fundamental para la formación profesional."
-  },
-  {
-    "id": "MED-999",
-    "name": "LEGISLACION MEDICA",
-    "credits": 2,
-    "theoreticalHours": 32,
-    "practicalHours": 0,
-    "term": 6,
-    "block": "PREMÉDICA",
-    "prerequisites": [],
-    "corequisites": [],
-    "isElective": true,
-    "electiveType": "general",
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "SOC-140",
@@ -846,12 +656,94 @@
     "theoreticalHours": 32,
     "practicalHours": 0,
     "term": 6,
-    "block": "PREMÉDICA",
+    "block": "PREMEDICA",
+    "elective": null,
     "prerequisites": [],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Curso de ciencias sociales aplicadas al contexto médico."
+    "corequisites": []
+  },
+  {
+    "id": "ENF-101",
+    "name": "CURSO DE ENFERMERIA BÁSICA",
+    "credits": 4,
+    "theoreticalHours": 48,
+    "practicalHours": 32,
+    "term": null,
+    "block": "PREMEDICA",
+    "elective": "GENERAL",
+    "prerequisites": [],
+    "corequisites": []
+  },
+  {
+    "id": "ING-160",
+    "name": "INGLES TÉCNICO MÉDICO",
+    "credits": 4,
+    "theoreticalHours": 64,
+    "practicalHours": 0,
+    "term": null,
+    "block": "PREMEDICA",
+    "elective": "GENERAL",
+    "prerequisites": [],
+    "corequisites": []
+  },
+  {
+    "id": "MED-986",
+    "name": "SALUD SEXUAL Y REPRODUCTIVA",
+    "credits": 4,
+    "theoreticalHours": 64,
+    "practicalHours": 0,
+    "term": null,
+    "block": "PREMEDICA",
+    "elective": "GENERAL",
+    "prerequisites": [],
+    "corequisites": []
+  },
+  {
+    "id": "MED-995",
+    "name": "MORAL MÉDICA",
+    "credits": 2,
+    "theoreticalHours": 32,
+    "practicalHours": 0,
+    "term": null,
+    "block": "PREMEDICA",
+    "elective": "GENERAL",
+    "prerequisites": [],
+    "corequisites": []
+  },
+  {
+    "id": "MED-996",
+    "name": "SALUD OCUPACIONAL",
+    "credits": 2,
+    "theoreticalHours": 32,
+    "practicalHours": 0,
+    "term": null,
+    "block": "PREMEDICA",
+    "elective": "GENERAL",
+    "prerequisites": [],
+    "corequisites": []
+  },
+  {
+    "id": "MED-997",
+    "name": "ADMINISTRACION DE SERVICIOS DE SALUD",
+    "credits": 4,
+    "theoreticalHours": 64,
+    "practicalHours": 0,
+    "term": null,
+    "block": "PREMEDICA",
+    "elective": "GENERAL",
+    "prerequisites": [],
+    "corequisites": []
+  },
+  {
+    "id": "MED-999",
+    "name": "LEGISLACION MEDICA",
+    "credits": 2,
+    "theoreticalHours": 32,
+    "practicalHours": 0,
+    "term": null,
+    "block": "PREMEDICA",
+    "elective": "GENERAL",
+    "prerequisites": [],
+    "corequisites": []
   },
   {
     "id": "SOC-480",
@@ -859,13 +751,11 @@
     "credits": 2,
     "theoreticalHours": 32,
     "practicalHours": 0,
-    "term": 6,
-    "block": "PREMÉDICA",
+    "term": null,
+    "block": "PREMEDICA",
+    "elective": "GENERAL",
     "prerequisites": [],
-    "corequisites": [],
-    "isElective": true,
-    "electiveType": "general",
-    "description": "Curso de ciencias sociales aplicadas al contexto médico."
+    "corequisites": []
   },
   {
     "id": "MED-172",
@@ -874,14 +764,12 @@
     "theoreticalHours": 64,
     "practicalHours": 0,
     "term": 7,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [],
     "corequisites": [
       "MED-175"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-175",
@@ -890,14 +778,12 @@
     "theoreticalHours": 0,
     "practicalHours": 64,
     "term": 7,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [],
     "corequisites": [
       "MED-172"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-192",
@@ -906,14 +792,12 @@
     "theoreticalHours": 64,
     "practicalHours": 0,
     "term": 7,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [],
     "corequisites": [
       "MED-197"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-197",
@@ -922,14 +806,12 @@
     "theoreticalHours": 0,
     "practicalHours": 32,
     "term": 7,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [],
     "corequisites": [
       "MED-192"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-200",
@@ -938,12 +820,10 @@
     "theoreticalHours": 48,
     "practicalHours": 0,
     "term": 7,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    "corequisites": []
   },
   {
     "id": "MED-232",
@@ -952,14 +832,12 @@
     "theoreticalHours": 64,
     "practicalHours": 0,
     "term": 7,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [],
     "corequisites": [
       "MED-235"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-235",
@@ -968,14 +846,12 @@
     "theoreticalHours": 0,
     "practicalHours": 32,
     "term": 7,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [],
     "corequisites": [
       "MED-232"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-860",
@@ -984,14 +860,12 @@
     "theoreticalHours": 64,
     "practicalHours": 0,
     "term": 7,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [],
     "corequisites": [
       "MED-865"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-865",
@@ -1000,98 +874,12 @@
     "theoreticalHours": 0,
     "practicalHours": 64,
     "term": 7,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [],
     "corequisites": [
       "MED-860"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
-  },
-  {
-    "id": "MED-941",
-    "name": "ELECTROCARDIOGRAFIA",
-    "credits": 2,
-    "theoreticalHours": 32,
-    "practicalHours": 0,
-    "term": 7,
-    "block": "CIENCIAS BÁSICAS",
-    "prerequisites": [],
-    "corequisites": [],
-    "isElective": true,
-    "electiveType": "professional",
-    "description": "Asignatura médica fundamental para la formación profesional."
-  },
-  {
-    "id": "MED-943",
-    "name": "BIOSEGURIDAD",
-    "credits": 3,
-    "theoreticalHours": 48,
-    "practicalHours": 0,
-    "term": 7,
-    "block": "CIENCIAS BÁSICAS",
-    "prerequisites": [],
-    "corequisites": [],
-    "isElective": true,
-    "electiveType": "professional",
-    "description": "Asignatura médica fundamental para la formación profesional."
-  },
-  {
-    "id": "MED-956",
-    "name": "MANEJO DE DESASTRES",
-    "credits": 3,
-    "theoreticalHours": 48,
-    "practicalHours": 0,
-    "term": 7,
-    "block": "CIENCIAS BÁSICAS",
-    "prerequisites": [],
-    "corequisites": [],
-    "isElective": true,
-    "electiveType": "professional",
-    "description": "Asignatura médica fundamental para la formación profesional."
-  },
-  {
-    "id": "MED-963",
-    "name": "APRENDIZAJES BASADOS EN PROBLEMAS",
-    "credits": 3,
-    "theoreticalHours": 48,
-    "practicalHours": 0,
-    "term": 7,
-    "block": "CIENCIAS BÁSICAS",
-    "prerequisites": [],
-    "corequisites": [],
-    "isElective": true,
-    "electiveType": "professional",
-    "description": "Asignatura médica fundamental para la formación profesional."
-  },
-  {
-    "id": "MED-984",
-    "name": "REANIMACION CARDIOPULMONAR",
-    "credits": 2,
-    "theoreticalHours": 32,
-    "practicalHours": 0,
-    "term": 7,
-    "block": "CIENCIAS BÁSICAS",
-    "prerequisites": [],
-    "corequisites": [],
-    "isElective": true,
-    "electiveType": "professional",
-    "description": "Asignatura médica fundamental para la formación profesional."
-  },
-  {
-    "id": "MED-988",
-    "name": "PSICOLOGIA MEDICA",
-    "credits": 3,
-    "theoreticalHours": 48,
-    "practicalHours": 0,
-    "term": 7,
-    "block": "CIENCIAS BÁSICAS",
-    "prerequisites": [],
-    "corequisites": [],
-    "isElective": true,
-    "electiveType": "professional",
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-212",
@@ -1100,17 +888,15 @@
     "theoreticalHours": 64,
     "practicalHours": 0,
     "term": 8,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [
       "MED-172",
       "MED-175"
     ],
     "corequisites": [
       "MED-214"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-214",
@@ -1119,17 +905,15 @@
     "theoreticalHours": 0,
     "practicalHours": 64,
     "term": 8,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [
       "MED-172",
       "MED-175"
     ],
     "corequisites": [
       "MED-212"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-272",
@@ -1138,17 +922,15 @@
     "theoreticalHours": 48,
     "practicalHours": 0,
     "term": 8,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [
       "MED-860",
       "MED-865"
     ],
     "corequisites": [
       "MED-274"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-274",
@@ -1157,17 +939,15 @@
     "theoreticalHours": 0,
     "practicalHours": 32,
     "term": 8,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [
       "MED-860",
       "MED-865"
     ],
     "corequisites": [
       "MED-272"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-292",
@@ -1176,17 +956,15 @@
     "theoreticalHours": 64,
     "practicalHours": 0,
     "term": 8,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [
       "MED-232",
       "MED-235"
     ],
     "corequisites": [
       "MED-295"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-295",
@@ -1195,17 +973,15 @@
     "theoreticalHours": 0,
     "practicalHours": 32,
     "term": 8,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [
       "MED-232",
       "MED-235"
     ],
     "corequisites": [
       "MED-292"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-300",
@@ -1214,17 +990,15 @@
     "theoreticalHours": 96,
     "practicalHours": 0,
     "term": 8,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [
       "MED-860",
       "MED-865"
     ],
     "corequisites": [
       "MED-305"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-305",
@@ -1233,17 +1007,15 @@
     "theoreticalHours": 0,
     "practicalHours": 64,
     "term": 8,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [
       "MED-860",
       "MED-865"
     ],
     "corequisites": [
       "MED-300"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-606",
@@ -1252,17 +1024,15 @@
     "theoreticalHours": 64,
     "practicalHours": 0,
     "term": 8,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [
       "MED-192",
       "MED-197"
     ],
     "corequisites": [
       "MED-607"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-607",
@@ -1271,17 +1041,15 @@
     "theoreticalHours": 0,
     "practicalHours": 32,
     "term": 8,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [
       "MED-192",
       "MED-197"
     ],
     "corequisites": [
       "MED-606"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-224",
@@ -1290,17 +1058,15 @@
     "theoreticalHours": 32,
     "practicalHours": 0,
     "term": 9,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [
       "MED-212",
       "MED-214"
     ],
     "corequisites": [
       "MED-225"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-225",
@@ -1309,17 +1075,15 @@
     "theoreticalHours": 0,
     "practicalHours": 32,
     "term": 9,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [
       "MED-212",
       "MED-214"
     ],
     "corequisites": [
       "MED-224"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-286",
@@ -1328,16 +1092,14 @@
     "theoreticalHours": 32,
     "practicalHours": 0,
     "term": 9,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [
       "MED-200"
     ],
     "corequisites": [
       "MED-287"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-287",
@@ -1346,16 +1108,14 @@
     "theoreticalHours": 0,
     "practicalHours": 32,
     "term": 9,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [
       "MED-200"
     ],
     "corequisites": [
       "MED-286"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-310",
@@ -1364,17 +1124,15 @@
     "theoreticalHours": 96,
     "practicalHours": 0,
     "term": 9,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [
       "MED-300",
       "MED-305"
     ],
     "corequisites": [
       "MED-315"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-315",
@@ -1383,17 +1141,15 @@
     "theoreticalHours": 0,
     "practicalHours": 64,
     "term": 9,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [
       "MED-300",
       "MED-305"
     ],
     "corequisites": [
       "MED-310"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-322",
@@ -1402,17 +1158,15 @@
     "theoreticalHours": 64,
     "practicalHours": 0,
     "term": 9,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [
       "MED-606",
       "MED-607"
     ],
     "corequisites": [
       "MED-325"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-325",
@@ -1421,17 +1175,15 @@
     "theoreticalHours": 0,
     "practicalHours": 32,
     "term": 9,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [
       "MED-606",
       "MED-607"
     ],
     "corequisites": [
       "MED-322"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-662",
@@ -1440,14 +1192,12 @@
     "theoreticalHours": 48,
     "practicalHours": 32,
     "term": 9,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [
       "MED-160"
     ],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    "corequisites": []
   },
   {
     "id": "MED-254",
@@ -1456,17 +1206,15 @@
     "theoreticalHours": 48,
     "practicalHours": 0,
     "term": 10,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [
       "MED-272",
       "MED-274"
     ],
     "corequisites": [
       "MED-255"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-255",
@@ -1475,17 +1223,15 @@
     "theoreticalHours": 0,
     "practicalHours": 32,
     "term": 10,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [
       "MED-272",
       "MED-274"
     ],
     "corequisites": [
       "MED-254"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-264",
@@ -1494,17 +1240,15 @@
     "theoreticalHours": 64,
     "practicalHours": 0,
     "term": 10,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [
       "MED-310",
       "MED-315"
     ],
     "corequisites": [
       "MED-267"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-267",
@@ -1513,17 +1257,15 @@
     "theoreticalHours": 0,
     "practicalHours": 32,
     "term": 10,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [
       "MED-310",
       "MED-315"
     ],
     "corequisites": [
       "MED-264"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-357",
@@ -1532,17 +1274,15 @@
     "theoreticalHours": 64,
     "practicalHours": 0,
     "term": 10,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [
       "MED-292",
       "MED-295",
       "MED-310",
       "MED-315"
     ],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    "corequisites": []
   },
   {
     "id": "MED-411",
@@ -1551,17 +1291,15 @@
     "theoreticalHours": 64,
     "practicalHours": 0,
     "term": 10,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [
       "MED-322",
       "MED-325"
     ],
     "corequisites": [
       "MED-414"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-414",
@@ -1570,17 +1308,15 @@
     "theoreticalHours": 0,
     "practicalHours": 32,
     "term": 10,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [
       "MED-322",
       "MED-325"
     ],
     "corequisites": [
       "MED-411"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-882",
@@ -1589,15 +1325,13 @@
     "theoreticalHours": 32,
     "practicalHours": 0,
     "term": 10,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [
       "MED-292",
       "MED-295"
     ],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    "corequisites": []
   },
   {
     "id": "MED-987",
@@ -1606,14 +1340,12 @@
     "theoreticalHours": 32,
     "practicalHours": 0,
     "term": 10,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [
       "MED-662"
     ],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    "corequisites": []
   },
   {
     "id": "MED-342",
@@ -1622,15 +1354,13 @@
     "theoreticalHours": 48,
     "practicalHours": 0,
     "term": 11,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [
       "MED-310",
       "MED-315"
     ],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    "corequisites": []
   },
   {
     "id": "MED-358",
@@ -1639,14 +1369,12 @@
     "theoreticalHours": 64,
     "practicalHours": 0,
     "term": 11,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [
       "MED-357"
     ],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    "corequisites": []
   },
   {
     "id": "MED-416",
@@ -1655,17 +1383,15 @@
     "theoreticalHours": 64,
     "practicalHours": 0,
     "term": 11,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [
       "MED-264",
       "MED-267"
     ],
     "corequisites": [
       "MED-419"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-419",
@@ -1674,17 +1400,15 @@
     "theoreticalHours": 0,
     "practicalHours": 32,
     "term": 11,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [
       "MED-264",
       "MED-267"
     ],
     "corequisites": [
       "MED-416"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-450",
@@ -1693,15 +1417,13 @@
     "theoreticalHours": 32,
     "practicalHours": 0,
     "term": 11,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [
       "MED-606",
       "MED-607"
     ],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    "corequisites": []
   },
   {
     "id": "MED-506",
@@ -1710,15 +1432,13 @@
     "theoreticalHours": 32,
     "practicalHours": 0,
     "term": 11,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [
       "MED-286",
       "MED-287"
     ],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    "corequisites": []
   },
   {
     "id": "MED-930",
@@ -1727,12 +1447,82 @@
     "theoreticalHours": 48,
     "practicalHours": 0,
     "term": 11,
-    "block": "CIENCIAS BÁSICAS",
+    "block": "BASICAS",
+    "elective": null,
     "prerequisites": [],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    "corequisites": []
+  },
+  {
+    "id": "MED-941",
+    "name": "ELECTROCARDIOGRAFIA",
+    "credits": 2,
+    "theoreticalHours": 32,
+    "practicalHours": 0,
+    "term": null,
+    "block": "BASICAS",
+    "elective": "BASICAS",
+    "prerequisites": [],
+    "corequisites": []
+  },
+  {
+    "id": "MED-943",
+    "name": "BIOSEGURIDAD",
+    "credits": 3,
+    "theoreticalHours": 48,
+    "practicalHours": 0,
+    "term": null,
+    "block": "BASICAS",
+    "elective": "BASICAS",
+    "prerequisites": [],
+    "corequisites": []
+  },
+  {
+    "id": "MED-956",
+    "name": "MANEJO DE DESASTRES",
+    "credits": 3,
+    "theoreticalHours": 48,
+    "practicalHours": 0,
+    "term": null,
+    "block": "BASICAS",
+    "elective": "BASICAS",
+    "prerequisites": [],
+    "corequisites": []
+  },
+  {
+    "id": "MED-963",
+    "name": "APRENDIZAJES BASADOS EN PROBLEMAS",
+    "credits": 3,
+    "theoreticalHours": 48,
+    "practicalHours": 0,
+    "term": null,
+    "block": "BASICAS",
+    "elective": "BASICAS",
+    "prerequisites": [],
+    "corequisites": []
+  },
+  {
+    "id": "MED-984",
+    "name": "REANIMACION CARDIOPULMONAR",
+    "credits": 2,
+    "theoreticalHours": 32,
+    "practicalHours": 0,
+    "term": null,
+    "block": "BASICAS",
+    "elective": "BASICAS",
+    "prerequisites": [],
+    "corequisites": []
+  },
+  {
+    "id": "MED-988",
+    "name": "PSICOLOGIA MEDICA",
+    "credits": 3,
+    "theoreticalHours": 48,
+    "practicalHours": 0,
+    "term": null,
+    "block": "BASICAS",
+    "elective": "BASICAS",
+    "prerequisites": [],
+    "corequisites": []
   },
   {
     "id": "MED-364",
@@ -1741,14 +1531,12 @@
     "theoreticalHours": 64,
     "practicalHours": 0,
     "term": 12,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [],
     "corequisites": [
       "MED-365"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-365",
@@ -1757,14 +1545,12 @@
     "theoreticalHours": 0,
     "practicalHours": 32,
     "term": 12,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [],
     "corequisites": [
       "MED-364"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-384",
@@ -1773,14 +1559,12 @@
     "theoreticalHours": 16,
     "practicalHours": 0,
     "term": 12,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [],
     "corequisites": [
       "MED-385"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-385",
@@ -1789,14 +1573,12 @@
     "theoreticalHours": 0,
     "practicalHours": 32,
     "term": 12,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [],
     "corequisites": [
       "MED-384"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-393",
@@ -1805,14 +1587,12 @@
     "theoreticalHours": 32,
     "practicalHours": 0,
     "term": 12,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [],
     "corequisites": [
       "MED-394"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-394",
@@ -1821,14 +1601,12 @@
     "theoreticalHours": 0,
     "practicalHours": 32,
     "term": 12,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [],
     "corequisites": [
       "MED-393"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-444",
@@ -1837,14 +1615,12 @@
     "theoreticalHours": 16,
     "practicalHours": 0,
     "term": 12,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [],
     "corequisites": [
       "MED-445"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-445",
@@ -1853,14 +1629,12 @@
     "theoreticalHours": 0,
     "practicalHours": 32,
     "term": 12,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [],
     "corequisites": [
       "MED-444"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-473",
@@ -1869,14 +1643,12 @@
     "theoreticalHours": 16,
     "practicalHours": 0,
     "term": 12,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [],
     "corequisites": [
       "MED-474"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-474",
@@ -1885,14 +1657,12 @@
     "theoreticalHours": 0,
     "practicalHours": 32,
     "term": 12,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [],
     "corequisites": [
       "MED-473"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-478",
@@ -1901,14 +1671,12 @@
     "theoreticalHours": 32,
     "practicalHours": 0,
     "term": 12,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [],
     "corequisites": [
       "MED-479"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-479",
@@ -1917,14 +1685,12 @@
     "theoreticalHours": 0,
     "practicalHours": 32,
     "term": 12,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [],
     "corequisites": [
       "MED-478"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-503",
@@ -1933,14 +1699,12 @@
     "theoreticalHours": 64,
     "practicalHours": 0,
     "term": 12,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [],
     "corequisites": [
       "MED-504"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-504",
@@ -1949,14 +1713,12 @@
     "theoreticalHours": 0,
     "practicalHours": 32,
     "term": 12,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [],
     "corequisites": [
       "MED-503"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-542",
@@ -1965,14 +1727,12 @@
     "theoreticalHours": 32,
     "practicalHours": 0,
     "term": 12,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [],
     "corequisites": [
       "MED-545"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-545",
@@ -1981,14 +1741,12 @@
     "theoreticalHours": 0,
     "practicalHours": 32,
     "term": 12,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [],
     "corequisites": [
       "MED-542"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-894",
@@ -1997,14 +1755,12 @@
     "theoreticalHours": 16,
     "practicalHours": 0,
     "term": 12,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [],
     "corequisites": [
       "MED-895"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-895",
@@ -2013,14 +1769,12 @@
     "theoreticalHours": 0,
     "practicalHours": 32,
     "term": 12,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [],
     "corequisites": [
       "MED-894"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-924",
@@ -2029,14 +1783,12 @@
     "theoreticalHours": 48,
     "practicalHours": 0,
     "term": 12,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [],
     "corequisites": [
       "MED-925"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-925",
@@ -2045,14 +1797,12 @@
     "theoreticalHours": 0,
     "practicalHours": 32,
     "term": 12,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [],
     "corequisites": [
       "MED-924"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-244",
@@ -2061,14 +1811,12 @@
     "theoreticalHours": 64,
     "practicalHours": 0,
     "term": 13,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [],
     "corequisites": [
       "MED-245"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-245",
@@ -2077,14 +1825,12 @@
     "theoreticalHours": 0,
     "practicalHours": 32,
     "term": 13,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [],
     "corequisites": [
       "MED-244"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-404",
@@ -2093,17 +1839,15 @@
     "theoreticalHours": 48,
     "practicalHours": 0,
     "term": 13,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [
       "MED-924",
       "MED-925"
     ],
     "corequisites": [
       "MED-405"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-405",
@@ -2112,17 +1856,15 @@
     "theoreticalHours": 0,
     "practicalHours": 32,
     "term": 13,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [
       "MED-924",
       "MED-925"
     ],
     "corequisites": [
       "MED-404"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-432",
@@ -2131,17 +1873,15 @@
     "theoreticalHours": 32,
     "practicalHours": 0,
     "term": 13,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [
       "MED-503",
       "MED-504"
     ],
     "corequisites": [
       "MED-434"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-434",
@@ -2150,17 +1890,15 @@
     "theoreticalHours": 0,
     "practicalHours": 32,
     "term": 13,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [
       "MED-503",
       "MED-504"
     ],
     "corequisites": [
       "MED-432"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-463",
@@ -2169,14 +1907,12 @@
     "theoreticalHours": 16,
     "practicalHours": 0,
     "term": 13,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [],
     "corequisites": [
       "MED-464"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-464",
@@ -2185,14 +1921,12 @@
     "theoreticalHours": 0,
     "practicalHours": 32,
     "term": 13,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [],
     "corequisites": [
       "MED-463"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-484",
@@ -2201,17 +1935,15 @@
     "theoreticalHours": 32,
     "practicalHours": 0,
     "term": 13,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [
       "MED-478",
       "MED-479"
     ],
     "corequisites": [
       "MED-485"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-485",
@@ -2220,17 +1952,15 @@
     "theoreticalHours": 0,
     "practicalHours": 32,
     "term": 13,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [
       "MED-478",
       "MED-479"
     ],
     "corequisites": [
       "MED-484"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-508",
@@ -2239,17 +1969,15 @@
     "theoreticalHours": 64,
     "practicalHours": 0,
     "term": 13,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [
       "MED-503",
       "MED-504"
     ],
     "corequisites": [
       "MED-509"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-509",
@@ -2258,17 +1986,15 @@
     "theoreticalHours": 0,
     "practicalHours": 32,
     "term": 13,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [
       "MED-503",
       "MED-504"
     ],
     "corequisites": [
       "MED-508"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-584",
@@ -2277,17 +2003,15 @@
     "theoreticalHours": 32,
     "practicalHours": 0,
     "term": 13,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [
       "MED-503",
       "MED-504"
     ],
     "corequisites": [
       "MED-585"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-585",
@@ -2296,17 +2020,15 @@
     "theoreticalHours": 0,
     "practicalHours": 32,
     "term": 13,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [
       "MED-503",
       "MED-504"
     ],
     "corequisites": [
       "MED-584"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "ADM-900",
@@ -2315,14 +2037,14 @@
     "theoreticalHours": 32,
     "practicalHours": 32,
     "term": 14,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
-    "prerequisites": [
-      "[] [Special pre-req: 1-13 terms completed]"
-    ],
+    "block": "CLINICAS",
+    "elective": null,
+    "prerequisites": [],
     "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Curso de administración y emprendimiento."
+    "requirement": {
+      "type": "allMandatoryThroughTerm",
+      "term": 13
+    }
   },
   {
     "id": "MED-374",
@@ -2331,17 +2053,15 @@
     "theoreticalHours": 128,
     "practicalHours": 0,
     "term": 14,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [
       "MED-508",
       "MED-509"
     ],
     "corequisites": [
       "MED-375"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-375",
@@ -2350,17 +2070,15 @@
     "theoreticalHours": 0,
     "practicalHours": 64,
     "term": 14,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [
       "MED-508",
       "MED-509"
     ],
     "corequisites": [
       "MED-374"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-493",
@@ -2369,17 +2087,15 @@
     "theoreticalHours": 48,
     "practicalHours": 0,
     "term": 14,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [
       "MED-508",
       "MED-509"
     ],
     "corequisites": [
       "MED-494"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-494",
@@ -2388,17 +2104,15 @@
     "theoreticalHours": 0,
     "practicalHours": 32,
     "term": 14,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [
       "MED-508",
       "MED-509"
     ],
     "corequisites": [
       "MED-493"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-512",
@@ -2407,15 +2121,13 @@
     "theoreticalHours": 32,
     "practicalHours": 0,
     "term": 14,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [
       "MED-508",
       "MED-509"
     ],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    "corequisites": []
   },
   {
     "id": "MED-524",
@@ -2424,17 +2136,15 @@
     "theoreticalHours": 32,
     "practicalHours": 0,
     "term": 14,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [
       "MED-508",
       "MED-509"
     ],
     "corequisites": [
       "MED-525"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-525",
@@ -2443,17 +2153,15 @@
     "theoreticalHours": 0,
     "practicalHours": 32,
     "term": 14,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [
       "MED-508",
       "MED-509"
     ],
     "corequisites": [
       "MED-524"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-534",
@@ -2462,17 +2170,15 @@
     "theoreticalHours": 16,
     "practicalHours": 0,
     "term": 14,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [
       "MED-508",
       "MED-509"
     ],
     "corequisites": [
       "MED-535"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-535",
@@ -2481,17 +2187,15 @@
     "theoreticalHours": 0,
     "practicalHours": 32,
     "term": 14,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [
       "MED-508",
       "MED-509"
     ],
     "corequisites": [
       "MED-534"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-552",
@@ -2500,15 +2204,13 @@
     "theoreticalHours": 32,
     "practicalHours": 0,
     "term": 14,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [
       "MED-444",
       "MED-445"
     ],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    "corequisites": []
   },
   {
     "id": "MED-614",
@@ -2517,17 +2219,15 @@
     "theoreticalHours": 16,
     "practicalHours": 0,
     "term": 14,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [
       "MED-508",
       "MED-509"
     ],
     "corequisites": [
       "MED-615"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-615",
@@ -2536,17 +2236,15 @@
     "theoreticalHours": 0,
     "practicalHours": 32,
     "term": 14,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [
       "MED-508",
       "MED-509"
     ],
     "corequisites": [
       "MED-614"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "DPG-010",
@@ -2555,14 +2253,12 @@
     "theoreticalHours": 64,
     "practicalHours": 0,
     "term": 15,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [
       "ADM-900"
     ],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Trabajo de investigación para obtención del grado académico."
+    "corequisites": []
   },
   {
     "id": "ESP-301",
@@ -2571,14 +2267,12 @@
     "theoreticalHours": 64,
     "practicalHours": 0,
     "term": 15,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [
       "ESP-189"
     ],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Curso de lengua española enfocado en comunicación y redacción."
+    "corequisites": []
   },
   {
     "id": "MED-423",
@@ -2587,17 +2281,15 @@
     "theoreticalHours": 128,
     "practicalHours": 0,
     "term": 15,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [
       "MED-374",
       "MED-375"
     ],
     "corequisites": [
       "MED-424"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-424",
@@ -2606,17 +2298,15 @@
     "theoreticalHours": 0,
     "practicalHours": 64,
     "term": 15,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [
       "MED-374",
       "MED-375"
     ],
     "corequisites": [
       "MED-423"
-    ],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    ]
   },
   {
     "id": "MED-427",
@@ -2625,15 +2315,13 @@
     "theoreticalHours": 32,
     "practicalHours": 0,
     "term": 15,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [
       "MED-374",
       "MED-375"
     ],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    "corequisites": []
   },
   {
     "id": "MED-435",
@@ -2642,15 +2330,13 @@
     "theoreticalHours": 32,
     "practicalHours": 0,
     "term": 15,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [
       "MED-374",
       "MED-375"
     ],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    "corequisites": []
   },
   {
     "id": "MED-622",
@@ -2659,15 +2345,13 @@
     "theoreticalHours": 32,
     "practicalHours": 0,
     "term": 15,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "block": "CLINICAS",
+    "elective": null,
     "prerequisites": [
       "MED-524",
       "MED-525"
     ],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    "corequisites": []
   },
   {
     "id": "MED-942",
@@ -2675,13 +2359,11 @@
     "credits": 3,
     "theoreticalHours": 32,
     "practicalHours": 32,
-    "term": 15,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "term": null,
+    "block": "CLINICAS",
+    "elective": "CLINICAS",
     "prerequisites": [],
-    "corequisites": [],
-    "isElective": true,
-    "electiveType": "professional",
-    "description": "Asignatura médica fundamental para la formación profesional."
+    "corequisites": []
   },
   {
     "id": "MED-944",
@@ -2689,13 +2371,11 @@
     "credits": 2,
     "theoreticalHours": 32,
     "practicalHours": 0,
-    "term": 15,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "term": null,
+    "block": "CLINICAS",
+    "elective": "CLINICAS",
     "prerequisites": [],
-    "corequisites": [],
-    "isElective": true,
-    "electiveType": "professional",
-    "description": "Asignatura médica fundamental para la formación profesional."
+    "corequisites": []
   },
   {
     "id": "MED-946",
@@ -2703,13 +2383,11 @@
     "credits": 2,
     "theoreticalHours": 32,
     "practicalHours": 0,
-    "term": 15,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "term": null,
+    "block": "CLINICAS",
+    "elective": "CLINICAS",
     "prerequisites": [],
-    "corequisites": [],
-    "isElective": true,
-    "electiveType": "professional",
-    "description": "Asignatura médica fundamental para la formación profesional."
+    "corequisites": []
   },
   {
     "id": "MED-949",
@@ -2717,13 +2395,11 @@
     "credits": 2,
     "theoreticalHours": 32,
     "practicalHours": 0,
-    "term": 15,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "term": null,
+    "block": "CLINICAS",
+    "elective": "CLINICAS",
     "prerequisites": [],
-    "corequisites": [],
-    "isElective": true,
-    "electiveType": "professional",
-    "description": "Asignatura médica fundamental para la formación profesional."
+    "corequisites": []
   },
   {
     "id": "MED-953",
@@ -2731,13 +2407,11 @@
     "credits": 2,
     "theoreticalHours": 32,
     "practicalHours": 0,
-    "term": 15,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "term": null,
+    "block": "CLINICAS",
+    "elective": "CLINICAS",
     "prerequisites": [],
-    "corequisites": [],
-    "isElective": true,
-    "electiveType": "professional",
-    "description": "Asignatura médica fundamental para la formación profesional."
+    "corequisites": []
   },
   {
     "id": "MED-954",
@@ -2745,13 +2419,11 @@
     "credits": 2,
     "theoreticalHours": 32,
     "practicalHours": 0,
-    "term": 15,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "term": null,
+    "block": "CLINICAS",
+    "elective": "CLINICAS",
     "prerequisites": [],
-    "corequisites": [],
-    "isElective": true,
-    "electiveType": "professional",
-    "description": "Asignatura médica fundamental para la formación profesional."
+    "corequisites": []
   },
   {
     "id": "MED-955",
@@ -2759,13 +2431,11 @@
     "credits": 3,
     "theoreticalHours": 48,
     "practicalHours": 0,
-    "term": 15,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "term": null,
+    "block": "CLINICAS",
+    "elective": "CLINICAS",
     "prerequisites": [],
-    "corequisites": [],
-    "isElective": true,
-    "electiveType": "professional",
-    "description": "Asignatura médica fundamental para la formación profesional."
+    "corequisites": []
   },
   {
     "id": "MED-958",
@@ -2773,13 +2443,11 @@
     "credits": 2,
     "theoreticalHours": 32,
     "practicalHours": 0,
-    "term": 15,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "term": null,
+    "block": "CLINICAS",
+    "elective": "CLINICAS",
     "prerequisites": [],
-    "corequisites": [],
-    "isElective": true,
-    "electiveType": "professional",
-    "description": "Asignatura médica fundamental para la formación profesional."
+    "corequisites": []
   },
   {
     "id": "MED-959",
@@ -2787,13 +2455,11 @@
     "credits": 3,
     "theoreticalHours": 48,
     "practicalHours": 0,
-    "term": 15,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "term": null,
+    "block": "CLINICAS",
+    "elective": "CLINICAS",
     "prerequisites": [],
-    "corequisites": [],
-    "isElective": true,
-    "electiveType": "professional",
-    "description": "Asignatura médica fundamental para la formación profesional."
+    "corequisites": []
   },
   {
     "id": "MED-964",
@@ -2801,13 +2467,11 @@
     "credits": 2,
     "theoreticalHours": 32,
     "practicalHours": 0,
-    "term": 15,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "term": null,
+    "block": "CLINICAS",
+    "elective": "CLINICAS",
     "prerequisites": [],
-    "corequisites": [],
-    "isElective": true,
-    "electiveType": "professional",
-    "description": "Asignatura médica fundamental para la formación profesional."
+    "corequisites": []
   },
   {
     "id": "MED-965",
@@ -2815,13 +2479,11 @@
     "credits": 2,
     "theoreticalHours": 32,
     "practicalHours": 0,
-    "term": 15,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "term": null,
+    "block": "CLINICAS",
+    "elective": "CLINICAS",
     "prerequisites": [],
-    "corequisites": [],
-    "isElective": true,
-    "electiveType": "professional",
-    "description": "Asignatura médica fundamental para la formación profesional."
+    "corequisites": []
   },
   {
     "id": "MED-966",
@@ -2829,13 +2491,11 @@
     "credits": 2,
     "theoreticalHours": 32,
     "practicalHours": 0,
-    "term": 15,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "term": null,
+    "block": "CLINICAS",
+    "elective": "CLINICAS",
     "prerequisites": [],
-    "corequisites": [],
-    "isElective": true,
-    "electiveType": "professional",
-    "description": "Asignatura médica fundamental para la formación profesional."
+    "corequisites": []
   },
   {
     "id": "MED-967",
@@ -2843,69 +2503,89 @@
     "credits": 3,
     "theoreticalHours": 48,
     "practicalHours": 0,
-    "term": 15,
-    "block": "CIENCIAS CLÍNICAS Y QUIRÚRGICAS",
+    "term": null,
+    "block": "CLINICAS",
+    "elective": "CLINICAS",
     "prerequisites": [],
-    "corequisites": [],
-    "isElective": true,
-    "electiveType": "professional",
-    "description": "Asignatura médica fundamental para la formación profesional."
+    "corequisites": []
   },
   {
     "id": "MED-015",
     "name": "CLINICA PSIQUIATRICA",
     "credits": 10,
-    "theoreticalHours": 6,
+    "theoreticalHours": 0,
     "practicalHours": 0,
+    "weeks": 6,
     "term": 16,
-    "block": "INTERNADO ROTATORIO",
+    "block": "INTERNADO",
+    "elective": null,
     "prerequisites": [],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    "corequisites": []
   },
   {
     "id": "MED-962",
     "name": "CIRUGIA GENERAL",
     "credits": 10,
-    "theoreticalHours": 10,
+    "theoreticalHours": 0,
     "practicalHours": 0,
+    "weeks": 10,
     "term": 16,
-    "block": "INTERNADO ROTATORIO",
+    "block": "INTERNADO",
+    "elective": null,
     "prerequisites": [],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    "corequisites": []
   },
   {
     "id": "MED-016",
     "name": "MEDICINA COMUNITARIA",
     "credits": 10,
-    "theoreticalHours": 8,
+    "theoreticalHours": 0,
     "practicalHours": 0,
+    "weeks": 8,
     "term": 17,
-    "block": "INTERNADO ROTATORIO",
+    "block": "INTERNADO",
+    "elective": null,
     "prerequisites": [],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    "corequisites": []
   },
   {
     "id": "MED-952",
     "name": "MEDICINA INTERNA",
     "credits": 10,
-    "theoreticalHours": 12,
+    "theoreticalHours": 0,
     "practicalHours": 0,
+    "weeks": 12,
     "term": 17,
-    "block": "INTERNADO ROTATORIO",
+    "block": "INTERNADO",
+    "elective": null,
     "prerequisites": [],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    "corequisites": []
+  },
+  {
+    "id": "MED-973",
+    "name": "GINECOLOGIA Y OBSTETRICIA",
+    "credits": 10,
+    "theoreticalHours": 0,
+    "practicalHours": 0,
+    "weeks": 8,
+    "term": 18,
+    "block": "INTERNADO",
+    "elective": null,
+    "prerequisites": [],
+    "corequisites": []
+  },
+  {
+    "id": "MED-982",
+    "name": "PEDIATRIA",
+    "credits": 10,
+    "theoreticalHours": 0,
+    "practicalHours": 0,
+    "weeks": 8,
+    "term": 18,
+    "block": "INTERNADO",
+    "elective": null,
+    "prerequisites": [],
+    "corequisites": []
   },
   {
     "id": "DPG-020",
@@ -2913,42 +2593,12 @@
     "credits": 6,
     "theoreticalHours": 96,
     "practicalHours": 0,
-    "term": 19,
-    "block": "PROYECTO DE GRADO",
+    "term": 18,
+    "block": "PROYECTO_GRADO",
+    "elective": null,
     "prerequisites": [
       "DPG-010"
     ],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Trabajo de investigación para obtención del grado académico."
-  },
-  {
-    "id": "MED-973",
-    "name": "GINECOLOGIA Y OBSTETRICIA",
-    "credits": 10,
-    "theoreticalHours": 8,
-    "practicalHours": 0,
-    "term": 18,
-    "block": "INTERNADO ROTATORIO",
-    "prerequisites": [],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
-  },
-  {
-    "id": "MED-982",
-    "name": "PEDIATRIA",
-    "credits": 10,
-    "theoreticalHours": 8,
-    "practicalHours": 0,
-    "term": 18,
-    "block": "INTERNADO ROTATORIO",
-    "prerequisites": [],
-    "corequisites": [],
-    "isElective": false,
-    "electiveType": null,
-    "description": "Asignatura médica fundamental para la formación profesional."
+    "corequisites": []
   }
 ]
